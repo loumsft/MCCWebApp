@@ -1,4 +1,4 @@
-flask_server/venv/
+flask-server/venv
 __pycache__
 client/node_modules
 .vscode
