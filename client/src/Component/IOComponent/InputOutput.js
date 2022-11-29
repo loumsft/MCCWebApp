@@ -4,18 +4,18 @@ import InputTable from "./InputTable";
 import CircularProgress from "@mui/material/CircularProgress";
 import Output from "./Output";
 
-function InputOutput({handleSubmit, handleChange, currentFileName, setCurrentFileName, outputData, setoutputData, isOutputLoading, username, setUsername, ticket, setTicket, description, setDescription}) {
+function InputOutput(props) {
   return (
     <Box
       component="form"
       noValidate
       autoComplete="off"
-      onSubmit={handleSubmit}
+      onSubmit={props.handleSubmit}
       sx={{ paddingTop: "4em" }}
     >
-      <InputTable handleChange={handleChange} currentFileName={currentFileName}/>
-      {Object.keys(outputData).length === 0 && outputData.constructor === Object ? ( //checks for empty outputData
-        isOutputLoading && (
+      <InputTable handleChange={props.handleChange} currentFileName={props.currentFileName}/>
+      {Object.keys(props.outputData).length === 0 && props.outputData.constructor === Object ? ( //checks for empty outputData
+        props.isOutputLoading && (
           <>
             <br />
             <CircularProgress />
@@ -23,10 +23,7 @@ function InputOutput({handleSubmit, handleChange, currentFileName, setCurrentFil
           </>
         )
       ) : (
-        <Output outputData={outputData} setoutputData={setoutputData} currentFileName={currentFileName} 
-          username={username} description={description} ticket={ticket}
-          setUsername={setUsername} setDescription={setDescription} setTicket={setTicket}
-          setCurrentFileName={setCurrentFileName}/>
+        <Output {...props}/>
       )}
       <br />
     </Box>

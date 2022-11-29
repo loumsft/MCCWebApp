@@ -29,6 +29,12 @@ export default function NewMCC(props) {
     setoutputData({});
     setisOutputLoading(true);//triggers the useeffect below regarding the isOutputLoading variable
   };
+
+  useEffect(() => {
+    console.log(username, description, ticket)
+
+  }, [username, description, ticket])
+  
   
   useEffect(() => { //runs only if the output is loading.
     // Return early, if this is the first render:
@@ -99,8 +105,11 @@ export default function NewMCC(props) {
     <>
       {showProfile? (
           <Profile
+            username={username}
             setUsername={setUsername}
+            description={description}
             setDescription={setDescription}
+            ticket={ticket}
             setTicket={setTicket}
             setShowProfile={setShowProfile}
             currentFileName={currentFileName}

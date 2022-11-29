@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -118,6 +118,7 @@ function Profile(props) {
                     label="Required"
                     id="name"
                     variant="outlined"
+                    defaultValue={props.username}
                   />
                 </TableCell>
               </TableRow>
@@ -131,6 +132,7 @@ function Profile(props) {
                   <ValidationTextField
                     id="description"
                     variant="outlined"
+                    defaultValue={props.description}
                   />
                 </TableCell>
               </TableRow>
@@ -144,6 +146,7 @@ function Profile(props) {
                   <ValidationTextField
                     id="ticket"
                     variant="outlined"
+                    defaultValue={props.ticket}
                   />
                 </TableCell>
               </TableRow>

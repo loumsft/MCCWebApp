@@ -297,7 +297,7 @@ export default function Output(props) {
   ];
 
   return (
-    <div>
+    <>
       <OutputTableTabs
         integratedRowsTotal={integratedRowsTotal}
         integratedRowsPerSite={integratedRowsPerSite}
@@ -326,7 +326,7 @@ export default function Output(props) {
               link.href = url;
               const date = new Date();
               const time = "" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getTime()
-              link.setAttribute("download", `MCC Sizing model ${time}.xlsx`); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
+              link.setAttribute("download", `${props.username} MCC Sizing model ${time}.xlsx`); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
               document.body.appendChild(link);
               link.click(); //programmatically click the link so the user doesn't have to
               document.body.removeChild(link);
@@ -341,6 +341,6 @@ export default function Output(props) {
         </Button>
         <Session {...props} />
       </div>
-    </div>
+    </>
   );
 }
