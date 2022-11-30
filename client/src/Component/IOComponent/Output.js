@@ -339,7 +339,7 @@ export default function Output(props) {
         >
           Download
         </Button>
-        <Session {...props} />
+        <Session {...props}/>
       </div>
     </>
   );

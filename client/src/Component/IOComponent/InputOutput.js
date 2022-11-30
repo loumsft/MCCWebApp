@@ -5,6 +5,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Output from "./Output";
 
 function InputOutput(props) {
+
+  const isEmpty = (obj) => {//check if object is empty
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  }
+
   return (
     <Box
       component="form"
@@ -14,7 +19,7 @@ function InputOutput(props) {
       sx={{ paddingTop: "4em" }}
     >
       <InputTable handleChange={props.handleChange} currentFileName={props.currentFileName}/>
-      {Object.keys(props.outputData).length === 0 && props.outputData.constructor === Object ? ( //checks for empty outputData
+      {isEmpty(props.outputData) ? ( //checks for empty outputData
         props.isOutputLoading && (
           <>
             <br />

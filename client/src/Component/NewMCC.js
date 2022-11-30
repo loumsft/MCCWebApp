@@ -30,11 +30,14 @@ export default function NewMCC(props) {
     setisOutputLoading(true);//triggers the useeffect below regarding the isOutputLoading variable
   };
 
-  useEffect(() => {
-    console.log(username, description, ticket)
+  // useEffect(() => {
+  //   console.log(username, description, ticket)
 
-  }, [username, description, ticket])
+  // }, [username, description, ticket])
   
+  const isEmpty = (obj) => {//check if object is empty
+    return Object.keys(obj).length === 0;
+  }
   
   useEffect(() => { //runs only if the output is loading.
     // Return early, if this is the first render:
@@ -42,26 +45,27 @@ export default function NewMCC(props) {
       didMount.current = true;
       return;
     }
-    fetch("/mcc/" + currentFileName, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        totalNumSessions,
-        totalTraffic,
-        numSites,
-        numCplane,
-        numUplane,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setoutputData(data);
-        setisOutputLoading(false);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOutputLoading]);
+    if (isOutputLoading && isEmpty(outputData)){//ensures that we only fetch when condition of outputloading and outputdata being empty is true
+      fetch("/mcc/" + currentFileName, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          totalNumSessions,
+          totalTraffic,
+          numSites,
+          numCplane,
+          numUplane,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setoutputData(data);
+          setisOutputLoading(false);
+        });
+    }
+  }, [outputData, isOutputLoading]);
 
   const handleChange = (e, row) => {
     const id = parseInt(e.target.id.split("_")[1]);

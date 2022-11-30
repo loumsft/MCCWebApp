@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
@@ -10,36 +10,29 @@ import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
 import Paper from "@mui/material/Paper";
 import {useNavigate} from "react-router-dom";
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 export default function ControlSummary(props) {
   const [serverData, setserverData] = useState({});
   const [isLoadingControl, setisLoadingControl] = useState(true);
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  const [activeStep, setActiveStep] = useState(0);
 
   const [currServerData, setCurrServerData] = useState({}); //new server data based on changes made to the user REGARDLESS of whether they saved or cancel their edits.
   const navigate = useNavigate();
-  const steps = ['Master Control (Settings for All Years)', 'User Plane Cluster Related Parameters'];
+  const steps = ['Master Control (Settings for All Years)', 'User Plane Cluster Related Parameters', 'Defined & Customized Parameters'];
+
+  const [param, setParam] = useState('Custom2')
+  const [isParamLoading, setIsParamLoading] = useState(true)
+  const didMount = useRef(false);
 
   const totalSteps = () => {
     return steps.length;
   };
 
-  const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
-
-  const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-  };
-
   const handleNext = () => {
-    // const newActiveStep =
-    //   isLastStep() && !allStepsCompleted()
-    //     ? It's the last step, but not all steps have been completed,
-    //       find the first step that has been completed
-    //       steps.findIndex((step, i) => !(i in completed))
-    //     : activeStep + 1;
     setActiveStep((activeStep + 1) % totalSteps());
   };
 
@@ -51,36 +44,33 @@ export default function ControlSummary(props) {
     setActiveStep(step);
   };
 
-  // const handleComplete = () => {
-  //   const newCompleted = completed;
-  //   newCompleted[activeStep] = true;
-  //   setCompleted(newCompleted);
-  //   handleNext();
-  // };
-
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-  };
-
   useEffect(() => {
     //Load the control and summary page
-    setisLoadingControl(true);
-    if (props.currentFileName) {
+    if (props.currentFileName && isLoadingControl) {
       axios("/control/" + props.currentFileName, {
         method: "get",
       }).then((response) => {
         setserverData(response.data);
         setCurrServerData(response.data);
         setisLoadingControl(false);
+        setIsParamLoading(false);
       });
     }
-  }, [props.currentFileName]);
+  }, [isLoadingControl, props.currentFileName]);
 
   useEffect(() => {
-    console.log(serverData)
-  }, [serverData])
-  
+    if (!didMount.current){//NOTE: make sure this is the last useEffect that changes didMount.current
+      didMount.current = true;
+      return
+    }
+    axios.post(
+      '/control/' + props.currentFileName, 
+      currServerData
+    ).then(() => {
+      setisLoadingControl(true)//triggers the useeffect above to reload the control n summary page
+    })
+  }, [param])
+
 
   const handleSave = (e) => {
     axios({
@@ -114,14 +104,16 @@ export default function ControlSummary(props) {
         break;
       }
       default:
-        console.error("invalid step in updateServerData");
+        console.error("invalid active step", activeStep);
     }
     
   }
-
-  // const handleSubmit = () => {
-  //   return;
-  // }
+  
+  const handleParamChange = (e, activeStep, index) => {
+    setIsParamLoading(true)
+    setParam(e.target.value);
+    onChange(e, activeStep, index)
+  };
   
   const renderComponent = (activeStep) => {
     switch (activeStep){
@@ -131,7 +123,7 @@ export default function ControlSummary(props) {
             <Typography component="span" sx={{ mt: 2, mb: 1, py: 1 }}>
               {steps[activeStep]}
             </Typography>
-            {currServerData["masterControl"].map((setting, index) => {
+            {serverData["masterControl"].map((setting, index) => {
               return (
                 <TextField
                   margin="dense"
@@ -153,19 +145,35 @@ export default function ControlSummary(props) {
             <Typography component="span" sx={{ mt: 2, mb: 1, py: 1 }}>
               {steps[activeStep]}
             </Typography>
-            {currServerData["UPClusterRelatedParams"].map((setting, index) => {
+            {serverData["UPClusterRelatedParams"].map((setting, index) => {
               return (
-                <TextField
-                  margin="dense"
-                  id={setting.id}
-                  key={index}
-                  label={setting.name}
-                  disabled={setting.id!=="UPParams"}
-                  fullWidth
-                  variant="standard"
-                  defaultValue={setting.data}
-                  onChange={(e) => onChange(e, activeStep, index)}
-                />
+                setting.id === "UPParams" ?
+                  (<FormControl fullWidth variant="standard" key={index}>
+                    <InputLabel id="parameter-label">Parameter</InputLabel>
+                    <Select
+                      id="demo-simple-select-standard"
+                      value={setting.data}
+                      onChange={(e) => handleParamChange(e, activeStep, index)}
+                    >
+                      {
+                        setting.parameters.map((parameter, i) => {
+                          return (<MenuItem value={parameter} key={i}>
+                            {parameter}
+                          </MenuItem>)
+                        })
+                      }
+                    </Select>
+                  </FormControl>) :
+                  <TextField
+                    margin="dense"
+                    id={setting.id}
+                    key={index}
+                    label={setting.name}
+                    disabled={setting.id!=="UPParams"}
+                    fullWidth
+                    variant="standard"
+                    defaultValue={setting.data}
+                  />
               );
             })}
           </>
@@ -201,68 +209,47 @@ export default function ControlSummary(props) {
     <Box sx={{ width: '80%', margin: "5em auto 0 auto" }}>
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
+          <Step key={label}>
             <StepButton color="inherit" onClick={handleStep(index)}>
               {label}
             </StepButton>
           </Step>
         ))}
       </Stepper>
-      {isLoadingControl ? (
+      {isLoadingControl || isParamLoading ? (
         <CircularProgress />
       ) : (
-        allStepsCompleted() ? (
-          <>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Paper
-              sx={{ margin: "2em auto auto auto", width: "75%", padding: "1em 1em 1em 1em"}}
+        <>
+          <Paper
+            sx={{ margin: "2em auto auto auto", width: "75%", padding: "1em 1em 1em 1em"}}
+          >
+            {/* {activeStep === 0 && renderComponent(activeStep)} Warning, renderCompoennt(activeStep) DOES NOT WORK as it will cause default values from one textfield to transfer over the other, a bug that should be reported to Material UI? */}
+            {/* {activeStep === 1 && renderComponent(activeStep)} */}
+            {/* {activeStep === 2 && renderComponent(activeStep)} */}
+
+            {renderComponent(activeStep)}
+          </Paper>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
             >
-              {activeStep === 0 && renderComponent(activeStep)} {/* Warning, renderCompoennt(activeStep) DOES NOT WORK as it will cause default values from one textfield to transfer over the other, a bug that should be reported to Material UI? */}
-              {activeStep === 1 && renderComponent(activeStep)}
-              {/* {renderComponent(activeStep)} */}
-            </Paper>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              
-              
-              <Button onClick={handleNext} sx={{ mr: 1 }}>
-                Next
-              </Button>
-              {/* {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete}>
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Finish'
-                      : 'Complete Step'}
-                  </Button>
-                ))} */}
-              <Button onClick={handleSave} sx={{ mr: 1 }}>
-                Save
-              </Button>
-            </Box>
-          </>
-        ))
+              Back
+            </Button>
+            <Box sx={{ flex: '1 1 auto' }} />
+            
+            
+            <Button onClick={handleNext} sx={{ mr: 1 }}>
+              Next
+            </Button>
+            <Button onClick={handleSave} sx={{ mr: 1 }}>
+              Save
+            </Button>
+          </Box>
+        </>
+      )
       }
     </Box>
   );
