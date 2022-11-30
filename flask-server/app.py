@@ -259,6 +259,7 @@ def updateControlSummarySheet(filename):
                     'name': "User Plane Cluster Related Parameters",
                     'id': "UPParams",
                     'data': sheet.range('User_Plane_Cluster_Related_Parameters').value,
+                    'parameters': [sheet.range('G21').value, sheet.range('H21').value, sheet.range('I21').value, sheet.range('J21').value, sheet.range('K21').value, sheet.range('L21').value]
                 },
                 {
                     'name': "Packet Switching Technollogy (SRIOV/NVDS/vSwitch)",
@@ -407,31 +408,7 @@ def updateControlSummarySheet(filename):
         
         #UP Cluster Related Parameters
         sheet.range('User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
-        sheet.range('Pkt_Switching_Technology__SRIOV_NVDS_vSwitch').value = data["UPClusterRelatedParams"][1]["data"]
-        sheet.range('TAM_Enabled').value = data["UPClusterRelatedParams"][2]["data"]
-        sheet.range('Is_MultiQ_Enabled?__1_YES__0_NO').value = data["UPClusterRelatedParams"][3]["data"]
-        sheet.range('Average_Packet_Size__Bytes').value = data["UPClusterRelatedParams"][4]["data"]
-        sheet.range('Legal_Intercept_enabled?').value = data["UPClusterRelatedParams"][5]["data"]
-        sheet.range('EDR_enabled?__1_YES__0_NO').value = data["UPClusterRelatedParams"][6]["data"]
-        sheet.range('CGNAT_enabled?__1_YES__0_NO').value = data["UPClusterRelatedParams"][7]["data"]
-        sheet.range('Percentage_of_traffic_going_through_proxy').value = data["UPClusterRelatedParams"][8]["data"]
-        sheet.range('L7_DPI_____App_hueristic_analysis').value = data["UPClusterRelatedParams"][9]["data"]
-        sheet.range('IO_bandwidth_per_NUMA__after_redundancy__Gbps').value = data["UPClusterRelatedParams"][10]["data"]
-        sheet.range('CP___Avg___of_Transactions_Per_BH_per_Session').value = data["UPClusterRelatedParams"][11]["data"]
-        sheet.range('UP___CPM_session_memory__kB').value = data["UPClusterRelatedParams"][12]["data"]
-        sheet.range('UP___SSM_session_memory__kB').value = data["UPClusterRelatedParams"][13]["data"]
-        sheet.range('UP___CPM_OS_memory_usage__GB').value = data["UPClusterRelatedParams"][14]["data"]
-        sheet.range('UP___SSM_OS_memory_usage__GB').value = data["UPClusterRelatedParams"][15]["data"]
-        sheet.range('CP___CPM_session_memory__kB').value = data["UPClusterRelatedParams"][16]["data"]
-        sheet.range('CP___SSM_session_memory__kB').value = data["UPClusterRelatedParams"][17]["data"]
-        sheet.range('CP___CPM_OS_memory_usage__GB').value = data["UPClusterRelatedParams"][18]["data"]
-        sheet.range('CP___SSM_OS_memory_usage__GB').value = data["UPClusterRelatedParams"][19]["data"]
-        sheet.range('Integrated___CPM_session_memory__kB').value = data["UPClusterRelatedParams"][20]["data"]
-        sheet.range('Integrated___SSM_session_memory__kB').value = data["UPClusterRelatedParams"][21]["data"]
-        sheet.range('Integrated___CPM_OS_memory_usage__GB').value = data["UPClusterRelatedParams"][22]["data"]
-        sheet.range('Integrated___SSM_OS_memory_usage__GB').value = data["UPClusterRelatedParams"][23]["data"]
-
-        response = data
+        response = "Data post to control & summary successful"
     book.save()
     book.close()
     app.quit()
@@ -464,6 +441,6 @@ def renameBook():
     data = request.get_json()
     os.rename(data["currentFileName"], data["newFileName"])
     return data["newFileName"]
-    
+
 if __name__ == "__main__":
     app.run(debug=True)
