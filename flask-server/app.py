@@ -379,9 +379,115 @@ def updateControlSummarySheet(filename):
             ],
             "defaultCustomizedParams": [
                 {
-                    'name': "Gateway Type",
-                    'id': "gatewayType",
-                    'data': sheet.range('C4').value,
+                    'name': "Parameters",
+                    'id': "UPParams",
+                    'data': sheet.range('G21:L21').value,
+                },
+                {
+                    'name': "Packet Switching Technology (SRIOV/NVDS/vSwitch)",
+                    'id': "PacketSwitchingTechnology",
+                    'data': sheet.range('G22:L22').value,
+                },
+                {
+                    'name': "TAM Enabled",
+                    'id': "TAMEnabled",
+                    'data': sheet.range('G23:L23').value,
+                },{
+                    'name': "is MultiQ Enabled? (1=Yes; 0=NO)",
+                    'id': "MultiQEnabled",
+                    'data': sheet.range('G24:L24').value,
+                },{
+                    'name': "Average Packet Size (Bytes)",
+                    'id': "AvgPacketSize",
+                    'data': sheet.range('G25:L25').value,
+                },{
+                    'name': "Legal Intercept enabled? (%)",
+                    'id': "LegalInterceptEnabled",
+                    'data': sheet.range('G26:L26').value,
+                },{
+                    'name': "EDR enabled? (1=YES; 0=NO)",
+                    'id': "EDREnabled",
+                    'data': sheet.range('G27:L27').value,
+                },{
+                    'name': "CGNAT enabled? (1=YES; 0=NO)",
+                    'id': "CGNATEnabled",
+                    'data': sheet.range('G28:L28').value,
+                },{
+                    'name': "Percentage of traffic going through proxy",
+                    'id': "PercentageTrafficProxy",
+                    'data': sheet.range('G29:L29').value,
+                },{
+                    'name': "L7 DPI % & App hueristic analysis",
+                    'id': "L7DPIAppAnalysis",
+                    'data': sheet.range('G30:L30').value,
+                },{
+                    'name': "IO bandwidth per NUMA (after redundancy) Gbps",
+                    'id': "IOBandwidthNUMA",
+                    'data': sheet.range('G31:L31').value,
+                },{
+                    'name': "CP - Avg # of Transactions Per BH per Session",
+                    'id': "CPAvgTransactions",
+                    'data': sheet.range('G32:L32').value,
+                },
+                {
+                    'name': "UP - CPM session memory (kB)",
+                    'id': "UPCPMSessionMemory",
+                    'data': sheet.range('G33:L33').value,
+                }, 
+                {
+                    'name': "UP - SSM session memory (kB)",
+                    'id': "UPSSMSessionMemory",
+                    'data': sheet.range('G34:L34').value,
+                }, 
+                {
+                    'name': "UP - CPM OS memory usage (GB)",
+                    'id': "UPCPMOSMemory",
+                    'data': sheet.range('G35:L35').value,
+                }, 
+                {
+                    'name': "UP - SSM OS memory usage (GB)",
+                    'id': "UPSSMOSMemory",
+                    'data': sheet.range('G36:L36').value,
+                }, 
+                {
+                    'name': "CP - CPM session memory (kB)",
+                    'id': "CPCPMSessionMemory",
+                    'data': sheet.range('G37:L37').value,
+                }, 
+                {
+                    'name': "CP - SSM session memory (kB)",
+                    'id': "CPSSMSessionMemory",
+                    'data': sheet.range('G38:L38').value,
+                }, 
+                {
+                    'name': "CP - CPM OS memory usage (GB)",
+                    'id': "CPCPMOSMemory",
+                    'data': sheet.range('G39:L39').value,
+                },
+                {
+                    'name': "CP - SSM OS memory usage (GB)",
+                    'id': "CPSSMOSMemory",
+                    'data': sheet.range('G40:L40').value,
+                },
+                {
+                    'name': "Integrated - CPM session memory (kB)",
+                    'id': "IntegratedCPMSessionMemory",
+                    'data': sheet.range('G41:L41').value,
+                }, 
+                {
+                    'name': "Integrated - SSM session memory (kB))",
+                    'id': "IntegratedSSMSessionMemory",
+                    'data': sheet.range('G42:L42').value,
+                }, 
+                {
+                    'name': "Integrated - CPM OS memory usage (GB)",
+                    'id': "IntegratedCPMOSMemory",
+                    'data': sheet.range('G43:L43').value,
+                }, 
+                {
+                    'name': "Integrated - SSM OS memory usage (GB)",
+                    'id': "IntegratedSSMOSMemory",
+                    'data': sheet.range('G44:L44').value,
                 },
             ]
         }

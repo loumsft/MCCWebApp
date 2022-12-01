@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import ParameterTable from './ParameterTable';
 
 export default function ControlSummary(props) {
   const [serverData, setserverData] = useState({});
@@ -119,7 +120,9 @@ export default function ControlSummary(props) {
     switch (activeStep){
       case 0:
         return (
-          <>
+          <Paper
+            sx={{ margin: "2em auto auto auto", width: "75%", padding: "1em 1em 1em 1em"}}
+          >
             <Typography component="span" sx={{ mt: 2, mb: 1, py: 1 }}>
               {steps[activeStep]}
             </Typography>
@@ -137,11 +140,13 @@ export default function ControlSummary(props) {
                 />
               );
             })}
-          </>
+          </Paper>
         );
       case 1:
         return (
-          <>
+          <Paper
+            sx={{ margin: "2em auto auto auto", width: "75%", padding: "1em 1em 1em 1em"}}
+          >
             <Typography component="span" sx={{ mt: 2, mb: 1, py: 1 }}>
               {steps[activeStep]}
             </Typography>
@@ -176,30 +181,28 @@ export default function ControlSummary(props) {
                   />
               );
             })}
-          </>
+          </Paper>
         );
       case 2:
-        // return (
-        //   <>
-        //     <Typography component="span" sx={{ mt: 2, mb: 1, py: 1 }}>
-        //       {steps[activeStep]}
-        //     </Typography>
-        //     {currServerData["defaultCustomizedParams"].map((setting, index) => {
-        //       return (
-        //         <TextField
-        //           margin="dense"
-        //           id={setting.id}
-        //           key={index}
-        //           label={setting.name}
-        //           fullWidth
-        //           variant="standard"
-        //           defaultValue={setting.data}
-        //         />
-        //       );
-        //     })}
-        //   </>
-        // );
-        break;
+        return (
+          <>
+            <ParameterTable paramsData={serverData["defaultCustomizedParams"]}/>
+            {/* {currServerData["defaultCustomizedParams"].map((setting, index) => {
+              return (
+                <TextField
+                  margin="dense"
+                  id={setting.id}
+                  key={index}
+                  label={setting.name}
+                  fullWidth
+                  variant="standard"
+                  defaultValue={setting.data}
+                />
+                
+              );
+            })} */}
+          </>
+        );
       default:
         return "Error Case Not Found";
     }
@@ -220,15 +223,12 @@ export default function ControlSummary(props) {
         <CircularProgress />
       ) : (
         <>
-          <Paper
-            sx={{ margin: "2em auto auto auto", width: "75%", padding: "1em 1em 1em 1em"}}
-          >
-            {/* {activeStep === 0 && renderComponent(activeStep)} Warning, renderCompoennt(activeStep) DOES NOT WORK as it will cause default values from one textfield to transfer over the other, a bug that should be reported to Material UI? */}
-            {/* {activeStep === 1 && renderComponent(activeStep)} */}
-            {/* {activeStep === 2 && renderComponent(activeStep)} */}
+          {/* {activeStep === 0 && renderComponent(activeStep)} Warning, renderCompoennt(activeStep) DOES NOT WORK as it will cause default values from one textfield to transfer over the other, a bug that should be reported to Material UI? */}
+          {/* {activeStep === 1 && renderComponent(activeStep)} */}
+          {/* {activeStep === 2 && renderComponent(activeStep)} */}
 
-            {renderComponent(activeStep)}
-          </Paper>
+          {renderComponent(activeStep)}
+          
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
