@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useEffect, useState} from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -12,27 +12,6 @@ import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography component="span">{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
@@ -45,18 +24,37 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function OutputTableTabs(props) {
   const { integratedRowsTotal, integratedRowsPerSite, cupsRowsCPPerSite, cupsRowsCPTotal, cupsRowsUPPerSite, cupsRowsUPTotal } = props;
-  const [value, setValue] = React.useState(0);
-  const focusRef = useRef()
+  const focusRef = useRef();
+
+  function TabPanel(props) {
+    const { children, tableTab, index,  ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={tableTab !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {tableTab === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography component="span">{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    props.setTableTab(newValue);
   };
 
   return (
     <Box sx={{ width: "95%", margin: "auto" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          value={value}
+          value={props.tableTab}
           onChange={handleChange}
           aria-label="basic tabs example"
           centered
@@ -66,7 +64,7 @@ export default function OutputTableTabs(props) {
           <Tab label="CUPS Case"/>
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel tableTab={props.tableTab} index={0}>
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
@@ -138,7 +136,7 @@ export default function OutputTableTabs(props) {
         </TableContainer>
 
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel tableTab={props.tableTab} index={1}>
       <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
