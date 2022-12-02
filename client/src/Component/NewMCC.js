@@ -15,11 +15,11 @@ export default function NewMCC(props) {
   const [profileLoading, setProfileLoading] = useState(false);
 
   //Input Table & Output Table related data
-  const [totalNumSessions, settotalNumSessions] = useState(["","","","","",]);
-  const [totalTraffic, settotalTraffic] = useState(["", "", "", "", ""]);
-  const [numSites, setnumSites] = useState(["", "", "", "", ""]);
-  const [numCplane, setnumCplane] = useState(["", "", "", "", ""]);
-  const [numUplane, setnumUplane] = useState(["", "", "", "", ""]);
+  const [totalNumSessions, settotalNumSessions] = useState(["11000000","13000000","10000000","17000000","19000000",]);
+  const [totalTraffic, settotalTraffic] = useState(["74", "84", "94", "84", "100"]);
+  const [numSites, setnumSites] = useState(["2", "2", "2", "2", "2"]);
+  const [numCplane, setnumCplane] = useState(["2", "2", "2", "2", "2"]);
+  const [numUplane, setnumUplane] = useState(["2", "2", "2", "2", "2"]);
   const [outputData, setoutputData] = useState({});//TODO: set empty obj
   const [isOutputLoading, setisOutputLoading] = useState(false);//TODO: set false
   const didMount = useRef(false);
@@ -130,7 +130,8 @@ export default function NewMCC(props) {
                 handleSubmit={handleSubmit} handleChange={handleChange} currentFileName={currentFileName} setCurrentFileName={setCurrentFileName}
                 outputData={outputData} setoutputData={setoutputData} isOutputLoading={isOutputLoading}
                 username={username} setUsername={setUsername} description={description} setDescription={setDescription}
-                ticket={ticket} setTicket={setTicket} 
+                ticket={ticket} setTicket={setTicket} totalNumSessions={totalNumSessions}
+                totalTraffic={totalTraffic} numSites={numSites} numCplane={numCplane} numUplane={numUplane}
               />}/>
             <Route path="/control" element={<ControlSummary currentFileName={currentFileName} handleSubmit={handleSubmit}/>}/>
           </Routes>

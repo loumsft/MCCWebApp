@@ -1,141 +1,142 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { ResponsiveLine } from "@nivo/line";
 
 
 
 export default function Graph(props){
   const data = [
-    {
-      "id": props.totalNumSessions.name,
-      "color": "hsl(215, 70%, 50%)",
-      "data": [
-        {
-          "x": "plane",
-          "y": props.totalNumSessions.data[0] //should not have indexing issue since component wont mount unless outputdata is not empty.
-        },
-        {
-          "x": "helicopter",
-          "y": props.totalNumSessions.data[1]
-        },
-        {
-          "x": "boat",
-          "y": props.totalNumSessions.data[2]
-        },
-        {
-          "x": "train",
-          "y": props.totalNumSessions.data[3]
-        },
-        {
-          "x": "subway",
-          "y": props.totalNumSessions.data[4]
-        },
-      ]
-    },
+    // {
+    //   "id": props.totalNumSessions.name,
+    //   "color": "hsl(215, 70%, 50%)",
+    //   "data": [
+    //     {
+    //       "x": "year1",
+    //       "y": props.totalNumSessions.data[0] //should not have indexing issue since component wont mount unless outputdata is not empty.
+    //     },
+    //     {
+    //       "x": "year2",
+    //       "y": props.totalNumSessions.data[1]
+    //     },
+    //     {
+    //       "x": "year3",
+    //       "y": props.totalNumSessions.data[2]
+    //     },
+    //     {
+    //       "x": "year4",
+    //       "y": props.totalNumSessions.data[3]
+    //     },
+    //     {
+    //       "x": "year5",
+    //       "y": props.totalNumSessions.data[4]
+    //     },
+    //   ]
+    // },
     {
       "id": props.totalTraffic.name,
       "color": "hsl(286, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
+          "x": "year1",
           "y": props.totalTraffic.data[0]
         },
         {
-          "x": "helicopter",
+          "x": "year2",
           "y": props.totalTraffic.data[1]
         },
         {
-          "x": "boat",
+          "x": "year3",
           "y": props.totalTraffic.data[2]
         },
         {
-          "x": "train",
+          "x": "year4",
           "y": props.totalTraffic.data[3]
         },
         {
-          "x": "subway",
+          "x": "year5",
           "y": props.totalTraffic.data[4]
         },
       ]
     },
     {
-      "id": "us",
+      "id": props.totalvCPUCPM.name,
       "color": "hsl(280, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
-          "y": 133
+          "x": "year1",
+          "y": props.totalvCPUCPM.data[0]
         },
         {
-          "x": "helicopter",
-          "y": 160
+          "x": "year2",
+          "y": props.totalvCPUCPM.data[1] 
         },
         {
-          "x": "boat",
-          "y": 239
+          "x": "year3",
+          "y": props.totalvCPUCPM.data[2]
         },
         {
-          "x": "train",
-          "y": 63
+          "x": "year4",
+          "y": props.totalvCPUCPM.data[3]
         },
         {
-          "x": "subway",
-          "y": 254
+          "x": "year5",
+          "y": props.totalvCPUCPM.data[4]
         },
       ]
     },
     {
-      "id": "germany",
+      "id": props.totalvCPUISM.name,
       "color": "hsl(305, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
-          "y": 207
+          "x": "year1",
+          "y": props.totalvCPUISM.data[0]
         },
         {
-          "x": "helicopter",
-          "y": 44
+          "x": "year2",
+          "y": props.totalvCPUISM.data[1]
         },
         {
-          "x": "boat",
-          "y": 115
+          "x": "year3",
+          "y": props.totalvCPUISM.data[2]
         },
         {
-          "x": "train",
-          "y": 153
+          "x": "year4",
+          "y": props.totalvCPUISM.data[3]
         },
         {
-          "x": "subway",
-          "y": 264
+          "x": "year5",
+          "y": props.totalvCPUISM.data[4]
         },
       ]
     },
     {
-      "id": "norway",
+      "id": props.totalvCPUMCM.name,
       "color": "hsl(335, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
-          "y": 67
+          "x": "year1",
+          "y": props.totalvCPUMCM.data[0]
         },
         {
-          "x": "helicopter",
-          "y": 243
+          "x": "year2",
+          "y": props.totalvCPUMCM.data[1]
         },
         {
-          "x": "boat",
-          "y": 100
+          "x": "year3",
+          "y": props.totalvCPUMCM.data[2]
         },
         {
-          "x": "train",
-          "y": 87
+          "x": "year4",
+          "y": props.totalvCPUMCM.data[3]
         },
         {
-          "x": "subway",
-          "y": 203
+          "x": "year5",
+          "y": props.totalvCPUMCM.data[4]
         },
       ]
     }
   ]
+
   return (
     <ResponsiveLine
         data={data}
@@ -175,32 +176,32 @@ export default function Graph(props){
         pointBorderColor={{ from: 'serieColor' }}
         pointLabelYOffset={-12}
         useMesh={true}
-        legends={[
-            {
-                anchor: 'bottom-right',
-                direction: 'column',
-                justify: false,
-                translateX: 100,
-                translateY: 0,
-                itemsSpacing: 0,
-                itemDirection: 'left-to-right',
-                itemWidth: 80,
-                itemHeight: 20,
-                itemOpacity: 0.75,
-                symbolSize: 12,
-                symbolShape: 'circle',
-                symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                effects: [
-                    {
-                        on: 'hover',
-                        style: {
-                            itemBackground: 'rgba(0, 0, 0, .03)',
-                            itemOpacity: 1
-                        }
-                    }
-                ]
-            }
-        ]}
+        // legends={[
+        //     {
+        //         anchor: 'bottom-right',
+        //         direction: 'column',
+        //         justify: false,
+        //         translateX: 100,
+        //         translateY: 0,
+        //         itemsSpacing: 0,
+        //         itemDirection: 'left-to-right',
+        //         itemWidth: 80,
+        //         itemHeight: 20,
+        //         itemOpacity: 0.75,
+        //         symbolSize: 12,
+        //         symbolShape: 'circle',
+        //         symbolBorderColor: 'rgba(0, 0, 0, .5)',
+        //         effects: [
+        //             {
+        //                 on: 'hover',
+        //                 style: {
+        //                     itemBackground: 'rgba(0, 0, 0, .03)',
+        //                     itemOpacity: 1
+        //                 }
+        //             }
+        //         ]
+        //     }
+        // ]}
     />
   )
 }

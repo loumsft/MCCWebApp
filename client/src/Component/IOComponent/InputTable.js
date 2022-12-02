@@ -49,6 +49,7 @@ export const rows = [
 ];
 
 function InputTable(props) {
+
   return (
     <div>
       <TableContainer component={Paper} sx={{margin: "auto", width: "90%", marginTop: "1em"}}>
@@ -80,6 +81,8 @@ function InputTable(props) {
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant="outlined"
                     autoFocus={row.title === "Total number of sessions"}
+                    value={props[row.id][0]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    
                   />
                 </TableCell>
                 <TableCell align="right">
@@ -87,6 +90,7 @@ function InputTable(props) {
                     id={row.id + "_1"}//year2
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant="outlined"
+                    value={props[row.id][1]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align="right">
@@ -94,6 +98,7 @@ function InputTable(props) {
                     id={row.id + "_2"}//year3
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant="outlined"
+                    value={props[row.id][2]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align="right">
@@ -101,6 +106,7 @@ function InputTable(props) {
                     id={row.id + "_3"}//year4
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant="outlined"
+                    value={props[row.id][3]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align="right">
@@ -108,6 +114,7 @@ function InputTable(props) {
                     id={row.id + "_4"}//year5
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant="outlined"
+                    value={props[row.id][4]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
               </TableRow>

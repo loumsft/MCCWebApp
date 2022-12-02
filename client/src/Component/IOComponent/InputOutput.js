@@ -18,7 +18,7 @@ function InputOutput(props) {
       onSubmit={props.handleSubmit}
       sx={{ paddingTop: "4em" }}
     >
-      <InputTable handleChange={props.handleChange} currentFileName={props.currentFileName}/>
+      <InputTable handleChange={props.handleChange} currentFileName={props.currentFileName} {...props}/>
       {isEmpty(props.outputData) ? ( //checks for empty outputData
         props.isOutputLoading && (
           <>

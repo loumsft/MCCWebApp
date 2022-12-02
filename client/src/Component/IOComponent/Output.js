@@ -4,6 +4,7 @@ import axios from "axios";
 import OutputTableTabs from "./OutputTableTabs";
 import Session from "./Session";
 import Graph from './Graph';
+import Paper from "@mui/material/Paper";
 
 export default function Output(props) {
   const integratedRowsTotal = [
@@ -14,18 +15,14 @@ export default function Output(props) {
     {
       name: "Total traffic (Gbps)",
       data: props.outputData.totalTrafficIC
-
     },
     {
       name: "Number of sites (For Integrated MCC)",
       data: props.outputData.numSitesIC
-
     },
-
     {
       name: "Number of CPM total all sites",
       data: props.outputData.numCPMTotalIC
-
     },
     {
       name: "Number of ISM total all sites",
@@ -214,6 +211,44 @@ export default function Output(props) {
 
   const [tableTab, setTableTab] = useState(0) //tab index of the output table tab
 
+  const GraphHandler = () => {
+    switch(tableTab){
+      case 0://Integrated Case
+        return (
+          <>
+            <h2 style={{paddingTop: "2%", marginBottom:0}}>
+              Total Integrated Case 
+            </h2>
+            <Graph 
+              totalNumSessions={integratedRowsTotal[0]} 
+              totalTraffic={integratedRowsTotal[1]} 
+              totalvCPUCPM={integratedRowsTotal[6]} 
+              totalvCPUISM={integratedRowsTotal[7]} 
+              totalvCPUMCM={integratedRowsTotal[8]} 
+            />
+          </>
+          
+        )
+      case 1://CUPS Case CP
+        return (
+          <>
+            <h2 style={{paddingTop: "2%", marginBottom: 0}}>
+              Total CUPS Case CP Site
+            </h2>
+            <Graph 
+              totalNumSessions={cupsRowsUPTotal[0]} 
+              totalTraffic={cupsRowsUPTotal[1]}
+              totalvCPUCPM={cupsRowsUPTotal[5]} 
+              totalvCPUISM={cupsRowsUPTotal[6]} 
+              totalvCPUMCM={cupsRowsUPTotal[7]} 
+            />
+          </>
+        )
+      default:
+        console.error("unknown table tab", tableTab)
+    }
+  }
+
   return (
     <>
       <OutputTableTabs
@@ -228,9 +263,9 @@ export default function Output(props) {
       />
 
       <br />
-      <div style={{ height: 600, margin: "auto" }}>
-        <Graph totalNumSessions={integratedRowsTotal[0]} totalTraffic={integratedRowsTotal[1]} />
-      </div>
+      <Paper sx={{ height: 400, width: "90%", margin: "auto", paddingBottom: "4%"}}>
+        {GraphHandler()}
+      </Paper>
       <br />
 
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
