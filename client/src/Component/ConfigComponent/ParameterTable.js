@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState} from "react";
+import { useRef } from "react";
+import { useDraggable } from "react-use-draggable-scroll";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,110 +8,145 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-// import TextField from "@mui/material/TextField";
-// import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-// const ValidationTextField = styled(TextField)({
-//   "& input:valid + fieldset": {
-//     borderColor: "black",
-//     borderWidth: 2,
-//   },
-//   "& input:invalid + fieldset": {
-//     borderColor: "blue",
-//     borderWidth: 2,
-//   },
-//   "& input:valid:focus + fieldset": {
-//     borderLeftWidth: 2,
-//     padding: "4px !important", // override inline-style
-//   },
-// });
+import TextField from "@mui/material/TextField";
+import { styled } from "@mui/material/styles";
+
+const ValidationTextField = styled(TextField)({
+  "& input:valid + fieldset": {
+    borderColor: "black",
+    borderWidth: 2,
+  },
+  "& input:invalid + fieldset": {
+    borderColor: "blue",
+    borderWidth: 2,
+  },
+  "& input:valid:focus + fieldset": {
+    borderLeftWidth: 2,
+    padding: "4px !important", // override inline-style
+  },
+});
 
 function ParameterTable(props) {
+  const [disableAdd, setDisableAdd] = useState(false)
+  const ref = useRef(); // We will use React useRef hook to reference the wrapping div:
+  const { events } = useDraggable(ref); // Now we pass the reference to the useDraggable hook;
+
+  const addCustomParameter = () => {
+    props.paramsData.forEach((row, index) => {
+      props.paramsData[index].data.push("")
+    })
+    props.setCurrServerData((prevServerData) => ({
+      ...prevServerData,
+      defaultCustomizedParams: props.paramsData
+    }));
+    setDisableAdd(true)
+  }
+  
+  const onChange = (e, rowIndex, columnIndex) => {
+    console.log(rowIndex, columnIndex)
+    const newRowData = props.paramsData
+    newRowData[rowIndex]['data'][columnIndex] = e.target.value
+
+    props.setCurrServerData((prevServerData) => ({
+      ...prevServerData,
+      defaultCustomizedParams: newRowData
+    }))
+  }
+
   return (
-    <TableContainer component={Paper} sx={{margin: "auto", width: "90%", marginTop: "1em"}}>
-        <Table sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}>
+    <div style={{ display: "flex" }}>
+      <TableContainer
+        component={Paper}
+        {...events}
+        ref={ref}
+        sx={{ margin: "auto", width: "90%", marginTop: "1em", overflow:"auto" }}
+      >
+        <Table sx={{ margin: "auto", width: "max-content"}}>
           <TableHead>
             <TableRow>
-                <TableCell align="center" key="paramTitle">{props.paramsData[0].name}</TableCell>
-                {props.paramsData[0].data.map((parameterName, index) => {
-                    return <TableCell align="center" key={index}>{parameterName}</TableCell>
-                })}
+              <TableCell align='center' key='paramTitle' sx={{width: "10%"}}>
+                {props.paramsData[0].name}
+              </TableCell>
+              {props.paramsData[0].data.map((parameterName, index) => {
+                return (
+                  <TableCell align='center' key={index} sx={{width: "10%"}}>
+                    {index >= 4 ?(
+                      <ValidationTextField
+                        required
+                        label='Required'
+                        value={parameterName || ""}
+                        onChange={(e) => onChange(e, 0, index)}
+                        
+                      />
+                    ):
+                      parameterName
+                    }
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody sx={{overflow:"auto"}}>
             {props.paramsData.map((row, index) => {
-                
-                return (
-                    index !== 0 &&
-                        <>
-                            <TableRow
-                            key={row.id}
-                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {/* <ValidationTextField
-                                    required
-                                    id={row.id + "_0"}//year1 
-                                    label="Required"
-                                    onChange={(e) => props.handleChange(e, row.title)}
-                                    variant="outlined"
-                                    autoFocus={row.title === "Total number of sessions"}
-                                    /> */}
-                                    {row.data[0]}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {/* <ValidationTextField
-                                    id={row.id + "_1"}//year2
-                                    onChange={(e) => props.handleChange(e, row.title)}
-                                    variant="outlined"
-                                    /> */}
-                                    {row.data[1]}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {/* <ValidationTextField
-                                    id={row.id + "_2"}//year3
-                                    onChange={(e) => props.handleChange(e, row.title)}
-                                    variant="outlined"
-                                    /> */}
-                                    {row.data[2]}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {/* <ValidationTextField
-                                    id={row.id + "_3"}//year4
-                                    onChange={(e) => props.handleChange(e, row.title)}
-                                    variant="outlined"
-                                    /> */}
-                                    {row.data[3]}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {/* <ValidationTextField
-                                    id={row.id + "_4"}//year5
-                                    onChange={(e) => props.handleChange(e, row.title)}
-                                    variant="outlined"
-                                    /> */}
-                                    {row.data[4]}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {/* <ValidationTextField
-                                    id={row.id + "_4"}//year5
-                                    onChange={(e) => props.handleChange(e, row.title)}
-                                    variant="outlined"
-                                    /> */}
-                                    {row.data[5]}
-                                </TableCell>
-                            </TableRow>
-                        </>
+              return (
+                index !== 0 && (
+                  <>
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                    >
+                      <TableCell component='th' scope='row' key={0} sx={{width: "10%"}}>
+                        {row.name}
+                      </TableCell>
+                      {
+                        row.data.map((element, j) => {
+                          return (
+                            j >= 4 ?( //num of defined parameters + title
+                              <TableCell align='center' key={j} sx={{width: "10%"}}>
+                                <ValidationTextField
+                                  onChange={(e) => onChange(e, index, j)}
+                                  // variant="outlined"
+                                  autoFocus={row.title === "Total number of sessions"}
+                                  value={element || ""}
+                                  // fullWidth
+                                  
+                                />
+                              </TableCell>
+                            ):(
+                              <TableCell align='center' >
+                                {element}
+                              </TableCell>
+                            )
+                          )
+                        })
+                      }
+                    </TableRow>
+                  </>
                 )
-            }
-                
-            )}
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
-  )
+      <Button
+        variant='contained'
+        style={{
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          margin: "1.1em auto auto auto",
+        }}
+        onClick={addCustomParameter}
+        disabled={disableAdd}
+      >
+        <AddCircleIcon />
+      </Button>
+    </div>
+  );
 }
 
-export default ParameterTable
+export default ParameterTable;

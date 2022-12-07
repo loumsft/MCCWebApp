@@ -28,40 +28,42 @@ const ValidationTextField = styled(TextField)({
 export const rows = [
   {
     title: "Total number of sessions",
-    id: "totalNumSessions"
+    id: "totalNumSessions",
   },
   {
-    title:"Total traffic (Gbps)",
-    id: "totalTraffic"
+    title: "Total traffic (Gbps)",
+    id: "totalTraffic",
   },
-  { 
-    title:"Number of sites (For Integrated MCC)",
-    id: "numSites"
+  {
+    title: "Number of sites (For Integrated MCC)",
+    id: "numSites",
   },
   {
     title: "Number of C-plane sites",
-    id: "numCplane"
+    id: "numCplane",
   },
   {
     title: "Number of U-plane sites",
-    id: "numUplane"
+    id: "numUplane",
   },
 ];
 
 function InputTable(props) {
-
   return (
     <div>
-      <TableContainer component={Paper} sx={{margin: "auto", width: "90%", marginTop: "1em"}}>
+      <TableContainer
+        component={Paper}
+        sx={{ margin: "auto", width: "90%", marginTop: "1em" }}
+      >
         <Table sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Input</TableCell>
-              <TableCell align="center">Year 1</TableCell>
-              <TableCell align="center">Year 2</TableCell>
-              <TableCell align="center">Year 3</TableCell>
-              <TableCell align="center">Year 4</TableCell>
-              <TableCell align="center">Year 5</TableCell>
+              <TableCell align='center'>Input</TableCell>
+              <TableCell align='center'>Year 1</TableCell>
+              <TableCell align='center'>Year 2</TableCell>
+              <TableCell align='center'>Year 3</TableCell>
+              <TableCell align='center'>Year 4</TableCell>
+              <TableCell align='center'>Year 5</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -70,51 +72,50 @@ function InputTable(props) {
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component='th' scope='row'>
                   {row.title}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align='right'>
                   <ValidationTextField
                     required
-                    id={row.id + "_0"}//year1 
-                    label="Required"
+                    id={row.id + "_0"} //year1
+                    label='Required'
                     onChange={(e) => props.handleChange(e, row.title)}
-                    variant="outlined"
+                    variant='outlined'
                     autoFocus={row.title === "Total number of sessions"}
-                    value={props[row.id][0]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
-                    
+                    value={props[row.id][0]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align='right'>
                   <ValidationTextField
-                    id={row.id + "_1"}//year2
+                    id={row.id + "_1"} //year2
                     onChange={(e) => props.handleChange(e, row.title)}
-                    variant="outlined"
-                    value={props[row.id][1]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    variant='outlined'
+                    value={props[row.id][1]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align='right'>
                   <ValidationTextField
-                    id={row.id + "_2"}//year3
+                    id={row.id + "_2"} //year3
                     onChange={(e) => props.handleChange(e, row.title)}
-                    variant="outlined"
-                    value={props[row.id][2]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    variant='outlined'
+                    value={props[row.id][2]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align='right'>
                   <ValidationTextField
-                    id={row.id + "_3"}//year4
+                    id={row.id + "_3"} //year4
                     onChange={(e) => props.handleChange(e, row.title)}
-                    variant="outlined"
-                    value={props[row.id][3]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    variant='outlined'
+                    value={props[row.id][3]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align='right'>
                   <ValidationTextField
-                    id={row.id + "_4"}//year5
+                    id={row.id + "_4"} //year5
                     onChange={(e) => props.handleChange(e, row.title)}
-                    variant="outlined"
-                    value={props[row.id][4]}//TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    variant='outlined'
+                    value={props[row.id][4]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
               </TableRow>
@@ -124,7 +125,12 @@ function InputTable(props) {
       </TableContainer>
       {/* should use border or padding */}
       <br />
-      <Button type="submit" color="primary" variant="contained" disabled={!props.currentFileName || props.currentFileName.length === 0}>
+      <Button
+        type='submit'
+        color='primary'
+        variant='contained'
+        disabled={!props.currentFileName || props.currentFileName.length === 0}
+      >
         Submit
       </Button>
     </div>

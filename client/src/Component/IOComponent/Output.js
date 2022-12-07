@@ -1,253 +1,249 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import OutputTableTabs from "./OutputTableTabs";
 import Session from "./Session";
-import Graph from './Graph';
+import Graph from "./Graph";
 import Paper from "@mui/material/Paper";
 
 export default function Output(props) {
   const integratedRowsTotal = [
     {
       name: "Total number of sessions",
-      data: props.outputData.totalNumSessionsIC
+      data: props.outputData.totalNumSessionsIC,
     },
     {
       name: "Total traffic (Gbps)",
-      data: props.outputData.totalTrafficIC
+      data: props.outputData.totalTrafficIC,
     },
     {
       name: "Number of sites (For Integrated MCC)",
-      data: props.outputData.numSitesIC
+      data: props.outputData.numSitesIC,
     },
     {
       name: "Number of CPM total all sites",
-      data: props.outputData.numCPMTotalIC
+      data: props.outputData.numCPMTotalIC,
     },
     {
       name: "Number of ISM total all sites",
-      data: props.outputData.numISMTotalIC
+      data: props.outputData.numISMTotalIC,
     },
     {
       name: "Number of MCM total all sites",
-      data: props.outputData.numMCMTotalIC
+      data: props.outputData.numMCMTotalIC,
     },
     {
       name: "Number of CPM vCPUs total all sites",
-      data: props.outputData.numvCPUCPMTotalIC
+      data: props.outputData.numvCPUCPMTotalIC,
     },
     {
       name: "Number of ISM vCPUs total all sites",
-      data: props.outputData.numISMvCPUTotalIC
+      data: props.outputData.numISMvCPUTotalIC,
     },
     {
       name: "Number of MCM vCPUs total all sites",
-      data: props.outputData.numMCMvCPUTotalIC
+      data: props.outputData.numMCMvCPUTotalIC,
     },
   ];
 
   const integratedRowsPerSite = [
     {
       name: "Sessions per site",
-      data: props.outputData.sessionsPerSiteIC
+      data: props.outputData.sessionsPerSiteIC,
     },
     {
       name: "Throughput per site (Gbps)",
-      data: props.outputData.throughputPerSiteIC
-
+      data: props.outputData.throughputPerSiteIC,
     },
     {
       name: "Number of CPM per site",
-      data: props.outputData.numCPMIC
+      data: props.outputData.numCPMIC,
     },
     {
       name: "Number of ISM/SSM per site",
-      data: props.outputData.numISMIC
-
+      data: props.outputData.numISMIC,
     },
     {
       name: "Number of MCM per site",
-      data: props.outputData.numMCMIC
-
+      data: props.outputData.numMCMIC,
     },
     {
       name: "Number of CPM vCPUs per site",
-      data: props.outputData.numvCPUCPMIC
+      data: props.outputData.numvCPUCPMIC,
     },
     {
       name: "Number of ISM/SSM vCPUs per site",
-      data: props.outputData.numvCPUISMIC
+      data: props.outputData.numvCPUISMIC,
     },
     {
       name: "Number of MCM vCPUs per site",
-      data: props.outputData.numvCPUMCMIC
+      data: props.outputData.numvCPUMCMIC,
     },
   ];
 
   const cupsRowsCPTotal = [
     {
       name: "Total number of sessions (CUPS Case CP Site)",
-      data: props.outputData.totalNumSessionsCCCP
+      data: props.outputData.totalNumSessionsCCCP,
     },
     {
       name: "Total Traffic (Gbps) (CUPS Case CP Site)",
-      data: props.outputData.totalTrafficCCCP
+      data: props.outputData.totalTrafficCCCP,
     },
     {
       name: "Number of CPM total all sites (CUPS Case CP Site)",
-      data: props.outputData.numCPMTotalCCCP
+      data: props.outputData.numCPMTotalCCCP,
     },
     {
       name: "Number of SSM total all sites (CUPS Case CP Site)",
-      data: props.outputData.numSSMTotalCCCP
+      data: props.outputData.numSSMTotalCCCP,
     },
     {
       name: "Number of MCM total all sites (CUPS Case CP Site)",
-      data: props.outputData.numMCMTotalCCCP
+      data: props.outputData.numMCMTotalCCCP,
     },
     {
       name: "Number of CPM vCPUs total all sites (CUPS Case CP Site)",
-      data: props.outputData.numCPMvCPUTotalCCCP
+      data: props.outputData.numCPMvCPUTotalCCCP,
     },
     {
       name: "Number of SSM vCPUs total all sites (CUPS Case CP Site)",
-      data: props.outputData.numSSMvCPUTotalCCCP
+      data: props.outputData.numSSMvCPUTotalCCCP,
     },
     {
       name: "Number of MCM vCPUs total all sites (CUPS Case CP Site)",
-      data: props.outputData.numMCMvCPUTotalCCCP
+      data: props.outputData.numMCMvCPUTotalCCCP,
     },
   ];
 
   const cupsRowsCPPerSite = [
     {
       name: "Number of CPM per site (CUPS Case CP Site)",
-      data: props.outputData.numCPMCCCP
+      data: props.outputData.numCPMCCCP,
     },
     {
       name: "Number of SSM per site (CUPS Case CP Site)",
-      data: props.outputData.numSSMCCCP
+      data: props.outputData.numSSMCCCP,
     },
     {
       name: "Number of MCM per site (CUPS Case CP Site)",
-      data: props.outputData.numMCMCCCP
+      data: props.outputData.numMCMCCCP,
     },
     {
       name: "Number of CPM vCPUs per site (CUPS Case CP Site)",
-      data: props.outputData.numCPMvCPUCCCP
+      data: props.outputData.numCPMvCPUCCCP,
     },
     {
       name: "Number of SSM vCPUs per site (CUPS Case CP Site)",
-      data: props.outputData.numSSMvCPUCCCP
+      data: props.outputData.numSSMvCPUCCCP,
     },
     {
       name: "Number of MCM vCPUs per site (CUPS Case CP Site)",
-      data: props.outputData.numMCMvCPUCCCP
+      data: props.outputData.numMCMvCPUCCCP,
     },
   ];
 
   const cupsRowsUPTotal = [
     {
       name: "Total number of sessions (CUPS Case UP Site)",
-      data: props.outputData.totalNumSessionsCCUP
+      data: props.outputData.totalNumSessionsCCUP,
     },
     {
       name: "Total Traffic (Gbps) (CUPS Case UP Site)",
-      data: props.outputData.totalTrafficCCUP
+      data: props.outputData.totalTrafficCCUP,
     },
     {
       name: "Number of CPM total all sites (CUPS Case UP Site)",
-      data: props.outputData.numCPMTotalCCUP
+      data: props.outputData.numCPMTotalCCUP,
     },
     {
       name: "Number of ISM total all sites (CUPS Case UP Site)",
-      data: props.outputData.numISMTotalCCUP
+      data: props.outputData.numISMTotalCCUP,
     },
     {
       name: "Number of MCM total all sites (CUPS Case UP Site)",
-      data: props.outputData.numMCMTotalCCUP
+      data: props.outputData.numMCMTotalCCUP,
     },
     {
       name: "Number of CPM vCPUs total all sites (CUPS Case UP Site)",
-      data: props.outputData.numCPMvCPUTotalCCUP
+      data: props.outputData.numCPMvCPUTotalCCUP,
     },
     {
       name: "Number of ISM vCPUs total all sites (CUPS Case UP Site)",
-      data: props.outputData.numISMvCPUTotalCCUP
+      data: props.outputData.numISMvCPUTotalCCUP,
     },
     {
       name: "Number of MSM vCPUs total all sites (CUPS Case UP Site)",
-      data: props.outputData.numMSMvCPUTotalCCUP
+      data: props.outputData.numMSMvCPUTotalCCUP,
     },
   ];
 
   const cupsRowsUPPerSite = [
     {
       name: "Number of CPM per site (CUPS Case UP Site)",
-      data: props.outputData.numCPMCCUP
+      data: props.outputData.numCPMCCUP,
     },
     {
       name: "Number of ISM per site (CUPS Case UP Site)",
-      data: props.outputData.numISMCCUP
+      data: props.outputData.numISMCCUP,
     },
     {
       name: "Number of MCM per site (CUPS Case UP Site)",
-      data: props.outputData.numMCMCCUP
+      data: props.outputData.numMCMCCUP,
     },
 
     {
       name: "Number of CPM vCPUs per site (CUPS Case UP Site)",
-      data: props.outputData.numCPMvCPUCCUP
+      data: props.outputData.numCPMvCPUCCUP,
     },
     {
       name: "Number of ISM vCPUs per site (CUPS Case UP Site)",
-      data: props.outputData.numISMvCPUCCUP
+      data: props.outputData.numISMvCPUCCUP,
     },
     {
       name: "Number of MSM vCPUs per site (CUPS Case UP Site)",
-      data: props.outputData.numMSMvCPUCCUP
+      data: props.outputData.numMSMvCPUCCUP,
     },
   ];
 
-  const [tableTab, setTableTab] = useState(0) //tab index of the output table tab
+  const [tableTab, setTableTab] = useState(0); //tab index of the output table tab
 
   const GraphHandler = () => {
-    switch(tableTab){
-      case 0://Integrated Case
+    switch (tableTab) {
+      case 0: //Integrated Case
         return (
           <>
-            <h2 style={{paddingTop: "2%", marginBottom:0}}>
-              Total Integrated Case 
+            <h2 style={{ paddingTop: "2%", marginBottom: 0 }}>
+              Total Integrated Case
             </h2>
-            <Graph 
-              totalNumSessions={integratedRowsTotal[0]} 
-              totalTraffic={integratedRowsTotal[1]} 
-              totalvCPUCPM={integratedRowsTotal[6]} 
-              totalvCPUISM={integratedRowsTotal[7]} 
-              totalvCPUMCM={integratedRowsTotal[8]} 
+            <Graph
+              totalNumSessions={integratedRowsTotal[0]}
+              totalTraffic={integratedRowsTotal[1]}
+              totalvCPUCPM={integratedRowsTotal[6]}
+              totalvCPUISM={integratedRowsTotal[7]}
+              totalvCPUMCM={integratedRowsTotal[8]}
             />
           </>
-          
-        )
-      case 1://CUPS Case CP
+        );
+      case 1: //CUPS Case CP
         return (
           <>
-            <h2 style={{paddingTop: "2%", marginBottom: 0}}>
-              Total CUPS Case CP Site
+            <h2 style={{ paddingTop: "2%", marginBottom: 0 }}>
+              Total CUPS Case UP Site
             </h2>
-            <Graph 
-              totalNumSessions={cupsRowsUPTotal[0]} 
+            <Graph
+              totalNumSessions={cupsRowsUPTotal[0]}
               totalTraffic={cupsRowsUPTotal[1]}
-              totalvCPUCPM={cupsRowsUPTotal[5]} 
-              totalvCPUISM={cupsRowsUPTotal[6]} 
-              totalvCPUMCM={cupsRowsUPTotal[7]} 
+              totalvCPUCPM={cupsRowsUPTotal[5]}
+              totalvCPUISM={cupsRowsUPTotal[6]}
+              totalvCPUMCM={cupsRowsUPTotal[7]}
             />
           </>
-        )
+        );
       default:
-        console.error("unknown table tab", tableTab)
+        console.error("unknown table tab", tableTab);
     }
-  }
+  };
 
   return (
     <>
@@ -262,10 +258,37 @@ export default function Output(props) {
         setTableTab={setTableTab}
       />
 
-      <br />
-      <Paper sx={{ height: 400, width: "90%", margin: "auto", paddingBottom: "4%"}}>
+      <Paper
+        sx={{
+          height: 400,
+          width: "91.4%",
+          margin: "auto",
+          paddingBottom: "4%",
+        }}
+      >
         {GraphHandler()}
       </Paper>
+      {tableTab === 1 && (
+        <Paper
+          sx={{
+            height: 400,
+            width: "91.4%",
+            margin: "auto",
+            paddingBottom: "4%",
+          }}
+        >
+          <h2 style={{ paddingTop: "2%", marginBottom: 0 }}>
+            Total CUPS Case CP Site
+          </h2>
+          <Graph
+            totalNumSessions={cupsRowsCPTotal[0]}
+            totalTraffic={cupsRowsCPTotal[1]}
+            totalvCPUCPM={cupsRowsCPTotal[5]}
+            totalvCPUISM={cupsRowsCPTotal[6]}
+            totalvCPUMCM={cupsRowsCPTotal[7]}
+          />
+        </Paper>
+      )}
       <br />
 
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
@@ -280,8 +303,19 @@ export default function Output(props) {
               const link = document.createElement("a");
               link.href = url;
               const date = new Date();
-              const time = "" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getTime()
-              link.setAttribute("download", `${props.username} MCC Sizing model ${time}.xlsx`); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
+              const time =
+                "" +
+                date.getFullYear() +
+                "-" +
+                (date.getMonth() + 1) +
+                "-" +
+                date.getDate() +
+                "-" +
+                date.getTime();
+              link.setAttribute(
+                "download",
+                `${props.username} MCC Sizing model ${time}.xlsx`
+              ); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
               document.body.appendChild(link);
               link.click(); //programmatically click the link so the user doesn't have to
               document.body.removeChild(link);
@@ -289,12 +323,12 @@ export default function Output(props) {
               //https://stackoverflow.com/questions/41938718/how-to-download-files-using-axios?noredirect=1&lq=1
             });
           }}
-          color="primary"
-          variant="contained"
+          color='primary'
+          variant='contained'
         >
           Download
         </Button>
-        <Session {...props}/>
+        <Session {...props} />
       </div>
     </>
   );

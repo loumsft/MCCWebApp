@@ -9,8 +9,8 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import SettingsIcon from "@mui/icons-material/Settings";
-import {Link} from "react-router-dom";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from "react-router-dom";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -19,7 +19,7 @@ function HideOnScroll(props) {
   });
 
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
+    <Slide appear={false} direction='down' in={!trigger}>
       {children}
     </Slide>
   );
@@ -27,42 +27,37 @@ function HideOnScroll(props) {
 
 function NavBar(props) {
   const onClickProfileHandler = () => {
-    props.setShowProfile(true)
-  }
+    props.setShowProfile(true);
+  };
   return (
     <HideOnScroll {...props}>
       <AppBar>
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography edge="start" variant="h6" component="div">
+          <Typography edge='start' variant='h6' component='div'>
             MCC WebApp
           </Typography>
-          {props.currentFileName?
-            <Typography edge="start" variant="h6" component="div">
+          {props.currentFileName ? (
+            <Typography edge='start' variant='h6' component='div'>
               {props.currentFileName}
-            </Typography> :
-            <CircularProgress color="inherit"/>
-          }
+            </Typography>
+          ) : (
+            <CircularProgress color='inherit' />
+          )}
           <div>
-            <Link to="/mcc/io">
-              <Button
-                variant="outlined"
-                sx={{ color: "white" }}
-              >
+            <Link to='/mcc/io'>
+              <Button variant='outlined' sx={{ color: "white" }}>
                 I/O
               </Button>
             </Link>
             <Button
-              variant="outlined"
+              variant='outlined'
               onClick={onClickProfileHandler}
               sx={{ color: "white" }}
             >
-              <AccountCircleIcon/>
+              <AccountCircleIcon />
             </Button>
-            <Link to="/mcc/control">
-              <Button
-                variant="outlined"
-                sx={{ color: "white" }}
-              >
+            <Link to='/mcc/control'>
+              <Button variant='outlined' sx={{ color: "white" }}>
                 <SettingsIcon />
               </Button>
             </Link>

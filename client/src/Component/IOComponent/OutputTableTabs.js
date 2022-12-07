@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -23,15 +23,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function OutputTableTabs(props) {
-  const { integratedRowsTotal, integratedRowsPerSite, cupsRowsCPPerSite, cupsRowsCPTotal, cupsRowsUPPerSite, cupsRowsUPTotal } = props;
+  const {
+    integratedRowsTotal,
+    integratedRowsPerSite,
+    cupsRowsCPPerSite,
+    cupsRowsCPTotal,
+    cupsRowsUPPerSite,
+    cupsRowsUPTotal,
+  } = props;
   const focusRef = useRef();
 
   function TabPanel(props) {
-    const { children, tableTab, index,  ...other } = props;
+    const { children, tableTab, index, ...other } = props;
 
     return (
       <div
-        role="tabpanel"
+        role='tabpanel'
         hidden={tableTab !== index}
         id={`simple-tabpanel-${index}`}
         aria-labelledby={`simple-tab-${index}`}
@@ -39,7 +46,7 @@ export default function OutputTableTabs(props) {
       >
         {tableTab === index && (
           <Box sx={{ p: 3 }}>
-            <Typography component="span">{children}</Typography>
+            <Typography component='span'>{children}</Typography>
           </Box>
         )}
       </div>
@@ -56,23 +63,25 @@ export default function OutputTableTabs(props) {
         <Tabs
           value={props.tableTab}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label='basic tabs example'
           centered
           ref={focusRef}
         >
-          <Tab label="Integrated Case"/>
-          <Tab label="CUPS Case"/>
+          <Tab label='Integrated Case' />
+          <Tab label='CUPS Case' />
         </Tabs>
       </Box>
       <TabPanel tableTab={props.tableTab} index={0}>
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
-            aria-label="simple table"
+            aria-label='simple table'
           >
             <TableHead>
               <TableRow>
-                <TableCell><strong>Total</strong></TableCell>
+                <TableCell>
+                  <strong>Total</strong>
+                </TableCell>
                 <TableCell>Year 1</TableCell>
                 <TableCell>Year 2</TableCell>
                 <TableCell>Year 3</TableCell>
@@ -86,7 +95,7 @@ export default function OutputTableTabs(props) {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
                   <TableCell>{row.data[0]}</TableCell>
@@ -99,15 +108,17 @@ export default function OutputTableTabs(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <br/>
+        <br />
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
-            aria-label="simple table"
+            aria-label='simple table'
           >
             <TableHead>
               <TableRow>
-                <TableCell><strong>Per Site</strong></TableCell>
+                <TableCell>
+                  <strong>Per Site</strong>
+                </TableCell>
                 <TableCell>Year 1</TableCell>
                 <TableCell>Year 2</TableCell>
                 <TableCell>Year 3</TableCell>
@@ -121,7 +132,7 @@ export default function OutputTableTabs(props) {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
                   <TableCell>{row.data[0]}</TableCell>
@@ -134,17 +145,18 @@ export default function OutputTableTabs(props) {
             </TableBody>
           </Table>
         </TableContainer>
-
       </TabPanel>
       <TabPanel tableTab={props.tableTab} index={1}>
-      <TableContainer component={Paper}>
+        <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
-            aria-label="simple table"
+            aria-label='simple table'
           >
             <TableHead>
               <TableRow>
-                <TableCell><strong>CP Total</strong> </TableCell>
+                <TableCell>
+                  <strong>CP Total</strong>{" "}
+                </TableCell>
                 <TableCell>Year 1</TableCell>
                 <TableCell>Year 2</TableCell>
                 <TableCell>Year 3</TableCell>
@@ -158,7 +170,7 @@ export default function OutputTableTabs(props) {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
                   <TableCell>{row.data[0]}</TableCell>
@@ -171,15 +183,18 @@ export default function OutputTableTabs(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <br/>
+        <br />
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
-            aria-label="simple table"
+            aria-label='simple table'
           >
             <TableHead>
               <TableRow>
-                <TableCell> <strong>CP Per Site</strong> </TableCell>
+                <TableCell>
+                  {" "}
+                  <strong>CP Per Site</strong>{" "}
+                </TableCell>
                 <TableCell>Year 1</TableCell>
                 <TableCell>Year 2</TableCell>
                 <TableCell>Year 3</TableCell>
@@ -193,7 +208,7 @@ export default function OutputTableTabs(props) {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
                   <TableCell>{row.data[0]}</TableCell>
@@ -206,15 +221,17 @@ export default function OutputTableTabs(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <br/>
+        <br />
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
-            aria-label="simple table"
+            aria-label='simple table'
           >
             <TableHead>
               <TableRow>
-                <TableCell><strong>UP Total</strong></TableCell>
+                <TableCell>
+                  <strong>UP Total</strong>
+                </TableCell>
                 <TableCell>Year 1</TableCell>
                 <TableCell>Year 2</TableCell>
                 <TableCell>Year 3</TableCell>
@@ -228,7 +245,7 @@ export default function OutputTableTabs(props) {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
                   <TableCell>{row.data[0]}</TableCell>
@@ -241,15 +258,17 @@ export default function OutputTableTabs(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <br/>
+        <br />
         <TableContainer component={Paper}>
           <Table
             sx={{ minWidth: 650, maxWidth: 1127, margin: "auto" }}
-            aria-label="simple table"
+            aria-label='simple table'
           >
             <TableHead>
               <TableRow>
-                <TableCell><strong>UP Per Site</strong> </TableCell>
+                <TableCell>
+                  <strong>UP Per Site</strong>{" "}
+                </TableCell>
                 <TableCell>Year 1</TableCell>
                 <TableCell>Year 2</TableCell>
                 <TableCell>Year 3</TableCell>
@@ -263,7 +282,7 @@ export default function OutputTableTabs(props) {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
                   <TableCell>{row.data[0]}</TableCell>

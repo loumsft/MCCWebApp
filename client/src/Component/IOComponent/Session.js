@@ -26,13 +26,13 @@ export default function Session(props) {
     props.setUsername(newUsername);
     props.setDescription(newDescription);
     props.setTicket(newTicket);
-    rows.forEach(row => {
+    rows.forEach((row) => {
       document.getElementById(row.id + "_0").value = "";
       document.getElementById(row.id + "_1").value = "";
       document.getElementById(row.id + "_2").value = "";
       document.getElementById(row.id + "_3").value = "";
       document.getElementById(row.id + "_4").value = "";
-    })
+    });
     axios({
       //asynchronously happens
       method: "post",
@@ -51,43 +51,43 @@ export default function Session(props) {
 
   return (
     <div>
-      <Button color="primary" variant="contained" onClick={handleClickOpen}>
+      <Button color='primary' variant='contained' onClick={handleClickOpen}>
         New Session
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
-        scroll="body"
+        scroll='body'
         sx={{ overflow: "auto" }}
       >
         <div>
           <DialogTitle>Create A New Session</DialogTitle>
           <DialogContent>
             <TextField
-              margin="dense"
-              id="username"
+              margin='dense'
+              id='username'
               // key={}
-              label="Username"
+              label='Username'
               fullWidth
-              variant="standard"
+              variant='standard'
               defaultValue={props.username}
             />
             <TextField
-              margin="dense"
-              id="description"
+              margin='dense'
+              id='description'
               // key={}
-              label="Description"
+              label='Description'
               fullWidth
-              variant="standard"
+              variant='standard'
               defaultValue={props.description}
             />
             <TextField
-              margin="dense"
-              id="ticket"
+              margin='dense'
+              id='ticket'
               // key={}
-              label="Ticket"
+              label='Ticket'
               fullWidth
-              variant="standard"
+              variant='standard'
               defaultValue={props.ticket}
             />
           </DialogContent>

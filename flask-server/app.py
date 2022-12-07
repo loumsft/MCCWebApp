@@ -14,6 +14,7 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # MCC API Route
 
+
 @app.route("/mcc/<filename>", methods=['POST'], strict_slashes=False)
 def mcc(filename):
     pythoncom.CoInitialize()  # IMPORTANT: apparently running app creates a thread and this falls uner a multithreading issue which needs to be looked into another time. This line fixes this issue
@@ -26,12 +27,16 @@ def mcc(filename):
     return result
 
 # Allows you to download Excel sheet, returns an Excel sheet
+
+
 @app.route("/download/<filename>", methods=['GET'], strict_slashes=False)
 def download(filename):
     return send_from_directory(ROOT_DIR, filename)
 
 # Update the input table in Excel with the parameters received from React.
 # each params are arrays of numbers length of 5 (for 5 years of data)
+
+
 def updateInputTable(filename, totalNumSessions, totalTraffic, numSites, numCplane, numUplane):
     with xw.App(visible=False) as app:
         book = app.books.open(filename)
@@ -175,6 +180,16 @@ def updateControlSummarySheet(filename):
     book = app.books.open(filename)
     sheet = book.sheets['Control & Summary']
 
+    # TODO: USE sheet['variableName'].expand().value for table in future iterations
+    # grab the next available column in parameter table and send to frontend
+    # returns a range object consisting address of parameter table.
+    parameterTable = sheet['F21'].expand()
+    startingColumn = parameterTable.column + 1
+    startingRow = parameterTable.row
+    lastColumn = parameterTable.end('right').column
+    lastRow = parameterTable.end('right').row
+    nextAvailableColumn = lastColumn + 1
+    nextAvailableRow = lastRow
     if request.method == 'GET':
         response = {
             "masterControl": [
@@ -305,47 +320,47 @@ def updateControlSummarySheet(filename):
                     'name': "L7 DPI % & App hueristic analysis",
                     'id': "L7DPIAppAnalysis",
                     'data': sheet.range('L7_DPI_____App_hueristic_analysis').value,
-                }, 
+                },
                 {
                     'name': "IO bandwidth per NUMA (after redundancy) Gbps",
                     'id': "IOBandwidthNUMA",
                     'data': sheet.range('IO_bandwidth_per_NUMA__after_redundancy__Gbps').value,
-                }, 
+                },
                 {
                     'name': "CP - Avg # of Transactions Per BH per Session",
                     'id': "CPAvgTransactions",
                     'data': sheet.range('CP___Avg___of_Transactions_Per_BH_per_Session').value,
-                }, 
+                },
                 {
                     'name': "UP - CPM session memory (kB)",
                     'id': "UPCPMSessionMemory",
                     'data': sheet.range('UP___CPM_session_memory__kB').value,
-                }, 
+                },
                 {
                     'name': "UP - SSM session memory (kB)",
                     'id': "UPSSMSessionMemory",
                     'data': sheet.range('UP___SSM_session_memory__kB').value,
-                }, 
+                },
                 {
                     'name': "UP - CPM OS memory usage (GB)",
                     'id': "UPCPMOSMemory",
                     'data': sheet.range('UP___CPM_OS_memory_usage__GB').value,
-                }, 
+                },
                 {
                     'name': "UP - SSM OS memory usage (GB)",
                     'id': "UPSSMOSMemory",
                     'data': sheet.range('UP___SSM_OS_memory_usage__GB').value,
-                }, 
+                },
                 {
                     'name': "CP - CPM session memory (kB)",
                     'id': "CPCPMSessionMemory",
                     'data': sheet.range('CP___CPM_session_memory__kB').value,
-                }, 
+                },
                 {
                     'name': "CP - SSM session memory (kB)",
                     'id': "CPSSMSessionMemory",
                     'data': sheet.range('CP___SSM_session_memory__kB').value,
-                }, 
+                },
                 {
                     'name': "CP - CPM OS memory usage (GB)",
                     'id': "CPCPMOSMemory",
@@ -360,17 +375,17 @@ def updateControlSummarySheet(filename):
                     'name': "Integrated - CPM session memory (kB)",
                     'id': "IntegratedCPMSessionMemory",
                     'data': sheet.range('Integrated___CPM_session_memory__kB').value,
-                }, 
+                },
                 {
                     'name': "Integrated - SSM session memory (kB))",
                     'id': "IntegratedSSMSessionMemory",
                     'data': sheet.range('Integrated___SSM_session_memory__kB').value,
-                }, 
+                },
                 {
                     'name': "Integrated - CPM OS memory usage (GB)",
                     'id': "IntegratedCPMOSMemory",
                     'data': sheet.range('Integrated___CPM_OS_memory_usage__GB').value,
-                }, 
+                },
                 {
                     'name': "Integrated - SSM OS memory usage (GB)",
                     'id': "IntegratedSSMOSMemory",
@@ -381,140 +396,165 @@ def updateControlSummarySheet(filename):
                 {
                     'name': "Parameters",
                     'id': "UPParams",
-                    'data': sheet.range('G21:L21').value,
+                    'data': sheet.range((startingRow, startingColumn), (startingRow, lastColumn)).value
                 },
                 {
                     'name': "Packet Switching Technology (SRIOV/NVDS/vSwitch)",
                     'id': "PacketSwitchingTechnology",
-                    'data': sheet.range('G22:L22').value,
+                    'data': sheet.range((startingRow + 1, startingColumn), (startingRow + 1, lastColumn)).value,
                 },
                 {
                     'name': "TAM Enabled",
                     'id': "TAMEnabled",
-                    'data': sheet.range('G23:L23').value,
-                },{
+                    'data': sheet.range((startingRow + 2, startingColumn), (startingRow + 2, lastColumn)).value,
+
+                }, {
                     'name': "is MultiQ Enabled? (1=Yes; 0=NO)",
                     'id': "MultiQEnabled",
-                    'data': sheet.range('G24:L24').value,
-                },{
+                    'data': sheet.range((startingRow + 3, startingColumn), (startingRow + 3, lastColumn)).value,
+
+                }, {
                     'name': "Average Packet Size (Bytes)",
                     'id': "AvgPacketSize",
-                    'data': sheet.range('G25:L25').value,
-                },{
+                    'data': sheet.range((startingRow + 4, startingColumn), (startingRow + 4, lastColumn)).value,
+
+                }, {
                     'name': "Legal Intercept enabled? (%)",
                     'id': "LegalInterceptEnabled",
-                    'data': sheet.range('G26:L26').value,
-                },{
+                    'data': sheet.range((startingRow + 5, startingColumn), (startingRow + 5, lastColumn)).value,
+
+                }, {
                     'name': "EDR enabled? (1=YES; 0=NO)",
                     'id': "EDREnabled",
-                    'data': sheet.range('G27:L27').value,
-                },{
+                    'data': sheet.range((startingRow + 6, startingColumn), (startingRow + 6, lastColumn)).value,
+                }, {
                     'name': "CGNAT enabled? (1=YES; 0=NO)",
                     'id': "CGNATEnabled",
-                    'data': sheet.range('G28:L28').value,
-                },{
+                    'data': sheet.range((startingRow + 7, startingColumn), (startingRow + 7, lastColumn)).value,
+                }, {
                     'name': "Percentage of traffic going through proxy",
                     'id': "PercentageTrafficProxy",
-                    'data': sheet.range('G29:L29').value,
-                },{
+                    'data': sheet.range((startingRow + 8, startingColumn), (startingRow + 8, lastColumn)).value,
+                }, {
                     'name': "L7 DPI % & App hueristic analysis",
                     'id': "L7DPIAppAnalysis",
-                    'data': sheet.range('G30:L30').value,
-                },{
+                    'data': sheet.range((startingRow + 9, startingColumn), (startingRow + 9, lastColumn)).value,
+                }, {
                     'name': "IO bandwidth per NUMA (after redundancy) Gbps",
                     'id': "IOBandwidthNUMA",
-                    'data': sheet.range('G31:L31').value,
-                },{
+                    'data': sheet.range((startingRow + 10, startingColumn), (startingRow + 10, lastColumn)).value,
+                }, {
                     'name': "CP - Avg # of Transactions Per BH per Session",
                     'id': "CPAvgTransactions",
-                    'data': sheet.range('G32:L32').value,
+                    'data': sheet.range((startingRow + 11, startingColumn), (startingRow + 11, lastColumn)).value,
                 },
                 {
                     'name': "UP - CPM session memory (kB)",
                     'id': "UPCPMSessionMemory",
-                    'data': sheet.range('G33:L33').value,
-                }, 
+                    'data': sheet.range((startingRow + 12, startingColumn), (startingRow + 12, lastColumn)).value,
+
+                },
                 {
                     'name': "UP - SSM session memory (kB)",
                     'id': "UPSSMSessionMemory",
-                    'data': sheet.range('G34:L34').value,
-                }, 
+                    'data': sheet.range((startingRow + 13, startingColumn), (startingRow + 13, lastColumn)).value,
+                },
                 {
                     'name': "UP - CPM OS memory usage (GB)",
                     'id': "UPCPMOSMemory",
-                    'data': sheet.range('G35:L35').value,
-                }, 
+                    'data': sheet.range((startingRow + 14, startingColumn), (startingRow + 14, lastColumn)).value,
+                },
                 {
                     'name': "UP - SSM OS memory usage (GB)",
                     'id': "UPSSMOSMemory",
-                    'data': sheet.range('G36:L36').value,
-                }, 
+                    'data': sheet.range((startingRow + 15, startingColumn), (startingRow + 15, lastColumn)).value,
+                },
                 {
                     'name': "CP - CPM session memory (kB)",
                     'id': "CPCPMSessionMemory",
-                    'data': sheet.range('G37:L37').value,
-                }, 
+                    'data': sheet.range((startingRow + 16, startingColumn), (startingRow + 16, lastColumn)).value,
+                },
                 {
                     'name': "CP - SSM session memory (kB)",
                     'id': "CPSSMSessionMemory",
-                    'data': sheet.range('G38:L38').value,
-                }, 
+                    'data': sheet.range((startingRow + 17, startingColumn), (startingRow + 17, lastColumn)).value,
+                },
                 {
                     'name': "CP - CPM OS memory usage (GB)",
                     'id': "CPCPMOSMemory",
-                    'data': sheet.range('G39:L39').value,
+                    'data': sheet.range((startingRow + 18, startingColumn), (startingRow + 18, lastColumn)).value,
                 },
                 {
                     'name': "CP - SSM OS memory usage (GB)",
                     'id': "CPSSMOSMemory",
-                    'data': sheet.range('G40:L40').value,
+                    'data': sheet.range((startingRow + 19, startingColumn), (startingRow + 19, lastColumn)).value,
                 },
                 {
                     'name': "Integrated - CPM session memory (kB)",
                     'id': "IntegratedCPMSessionMemory",
-                    'data': sheet.range('G41:L41').value,
-                }, 
+                    'data': sheet.range((startingRow + 20, startingColumn), (startingRow + 20, lastColumn)).value,
+                },
                 {
                     'name': "Integrated - SSM session memory (kB))",
                     'id': "IntegratedSSMSessionMemory",
-                    'data': sheet.range('G42:L42').value,
-                }, 
+                    'data': sheet.range((startingRow + 21, startingColumn), (startingRow + 21, lastColumn)).value,
+                },
                 {
                     'name': "Integrated - CPM OS memory usage (GB)",
                     'id': "IntegratedCPMOSMemory",
-                    'data': sheet.range('G43:L43').value,
-                }, 
+                    'data': sheet.range((startingRow + 22, startingColumn), (startingRow + 22, lastColumn)).value,
+                },
                 {
                     'name': "Integrated - SSM OS memory usage (GB)",
                     'id': "IntegratedSSMOSMemory",
-                    'data': sheet.range('G44:L44').value,
+                    'data': sheet.range((startingRow + 23, startingColumn), (startingRow + 23, lastColumn)).value,
                 },
             ]
         }
     elif request.method == 'POST':
         data = request.get_json()
-        # looping through array to create dictionary for quick access.
-        
-        #Master Control settings
+        # Master Control settings
         sheet.range('C4').value = data["masterControl"][0]["data"]
-        sheet.range('SSM_ISM__Number_of_vCPU_s').value = data["masterControl"][1]["data"]
-        sheet.range('CPM_DCM_CCM__Number_of_vCPU_s').value = data["masterControl"][2]["data"]
-        sheet.range('MCM__Number_of_vCPU_s').value = data["masterControl"][3]["data"]
-        sheet.range('SSM_ISM__Memory__GB').value = data["masterControl"][4]["data"]
+        sheet.range(
+            'SSM_ISM__Number_of_vCPU_s').value = data["masterControl"][1]["data"]
+        sheet.range(
+            'CPM_DCM_CCM__Number_of_vCPU_s').value = data["masterControl"][2]["data"]
+        sheet.range(
+            'MCM__Number_of_vCPU_s').value = data["masterControl"][3]["data"]
+        sheet.range(
+            'SSM_ISM__Memory__GB').value = data["masterControl"][4]["data"]
         sheet.range('CPM__Memory__GB').value = data["masterControl"][5]["data"]
         sheet.range('MCM__Memory__GB').value = data["masterControl"][6]["data"]
-        sheet.range('Max_session_per_ISM').value = data["masterControl"][7]["data"]
-        sheet.range('Max_session_per_CPM').value = data["masterControl"][8]["data"]
-        sheet.range('Control_Plane_CPU_engineering_limit').value = data["masterControl"][9]["data"]
-        sheet.range('User_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
-        sheet.range('Control_Plane_Memory_engineering_limit').value = data["masterControl"][11]["data"]
-        sheet.range('User_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
-        sheet.range('Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][13]["data"]
-        sheet.range('Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][14]["data"]
-        
-        #UP Cluster Related Parameters
-        sheet.range('User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
+        sheet.range(
+            'Max_session_per_ISM').value = data["masterControl"][7]["data"]
+        sheet.range(
+            'Max_session_per_CPM').value = data["masterControl"][8]["data"]
+        sheet.range(
+            'Control_Plane_CPU_engineering_limit').value = data["masterControl"][9]["data"]
+        sheet.range(
+            'User_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
+        sheet.range(
+            'Control_Plane_Memory_engineering_limit').value = data["masterControl"][11]["data"]
+        sheet.range(
+            'User_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
+        sheet.range(
+            'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][13]["data"]
+        sheet.range(
+            'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][14]["data"]
+
+        # UP Cluster Related Parameters
+        sheet.range(
+            'User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
         response = "Data post to control & summary successful"
+
+        # TODO: Post and update the customized parameter section as well.
+        #add new customized parameter column to excel parameter table
+        
+        #editable parameters begin on the 5th index in data["defaultCustomizedParams][i]["data"]
+        for row in range(len(data["defaultCustomizedParams"])):
+            for col in range(4, len(data["defaultCustomizedParams"][row]["data"])):
+                print(data["defaultCustomizedParams"][row]["data"][col], sheet.range((startingRow + row, startingColumn + col)).value)
+                sheet.range((startingRow + row, startingColumn + col)).value = data["defaultCustomizedParams"][row]["data"][col]
     book.save()
     book.close()
     app.quit()
@@ -532,7 +572,7 @@ def createBook():
         now = datetime.now()
         newTitle = now.strftime("%Y_%m_%d_%H_%M_%S") + '.xlsx'
         if data['ticket']:
-            newTitle =  data['ticket'] + "_" + newTitle
+            newTitle = data['ticket'] + "_" + newTitle
         if data['description']:
             newTitle = data['description'] + "_" + newTitle
         if data['username']:
@@ -542,11 +582,13 @@ def createBook():
     pythoncom.CoUninitialize()
     return newTitle
 
+
 @app.route("/renamebook", methods=["POST"], strict_slashes=False)
 def renameBook():
     data = request.get_json()
     os.rename(data["currentFileName"], data["newFileName"])
     return data["newFileName"]
+
 
 if __name__ == "__main__":
     app.run(debug=True)
