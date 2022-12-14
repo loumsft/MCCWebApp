@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -49,6 +49,18 @@ export const rows = [
 ];
 
 function InputTable(props) {
+
+  useEffect(() => {
+    console.log(props.totalNumSessions)
+  }, [props.totalNumSessions])
+  
+  const setInputValue = (rowDataArr, index) => {
+    if (rowDataArr && rowDataArr[index]){
+      return rowDataArr[index]
+    }
+    return ""
+  }
+  
   return (
     <div>
       <TableContainer
@@ -83,7 +95,7 @@ function InputTable(props) {
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant='outlined'
                     autoFocus={row.title === "Total number of sessions"}
-                    value={props[row.id][0]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    value={setInputValue(props[row.id], 0)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align='right'>
@@ -91,7 +103,7 @@ function InputTable(props) {
                     id={row.id + "_1"} //year2
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant='outlined'
-                    value={props[row.id][1]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    value={setInputValue(props[row.id], 1)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align='right'>
@@ -99,7 +111,7 @@ function InputTable(props) {
                     id={row.id + "_2"} //year3
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant='outlined'
-                    value={props[row.id][2]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    value={setInputValue(props[row.id], 2)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align='right'>
@@ -107,7 +119,7 @@ function InputTable(props) {
                     id={row.id + "_3"} //year4
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant='outlined'
-                    value={props[row.id][3]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    value={setInputValue(props[row.id], 3)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
                 <TableCell align='right'>
@@ -115,7 +127,7 @@ function InputTable(props) {
                     id={row.id + "_4"} //year5
                     onChange={(e) => props.handleChange(e, row.title)}
                     variant='outlined'
-                    value={props[row.id][4]} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
+                    value={setInputValue(props[row.id], 4)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
                   />
                 </TableCell>
               </TableRow>

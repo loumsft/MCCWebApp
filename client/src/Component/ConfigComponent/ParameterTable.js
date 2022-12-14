@@ -46,7 +46,6 @@ function ParameterTable(props) {
   }
   
   const onChange = (e, rowIndex, columnIndex) => {
-    console.log(rowIndex, columnIndex)
     const newRowData = props.paramsData
     newRowData[rowIndex]['data'][columnIndex] = e.target.value
 
@@ -62,7 +61,7 @@ function ParameterTable(props) {
         component={Paper}
         {...events}
         ref={ref}
-        sx={{ margin: "auto", width: "90%", marginTop: "1em", overflow:"auto" }}
+        sx={{ margin: "auto", marginTop: "1em", overflow:"auto" }}
       >
         <Table sx={{ margin: "auto", width: "max-content"}}>
           <TableHead>

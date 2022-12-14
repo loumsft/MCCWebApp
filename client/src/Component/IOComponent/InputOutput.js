@@ -18,11 +18,15 @@ function InputOutput(props) {
       onSubmit={props.handleSubmit}
       sx={{ paddingTop: "4em" }}
     >
-      <InputTable
-        handleChange={props.handleChange}
-        currentFileName={props.currentFileName}
-        {...props}
-      />
+      {props.isImporting ?(
+        <>
+          <br/>
+          <CircularProgress />
+        </>
+      ) :(
+        <InputTable {...props}/>
+      )}
+      
       {isEmpty(props.outputData) ? ( //checks for empty outputData
         props.isOutputLoading && (
           <>

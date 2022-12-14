@@ -62,7 +62,6 @@ function NavBar(props) {
               </Button>
             </Link>
           </div>
-          {/* <ControlNSummary {...props}/> */}
         </Toolbar>
       </AppBar>
     </HideOnScroll>

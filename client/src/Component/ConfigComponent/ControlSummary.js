@@ -74,11 +74,6 @@ export default function ControlSummary(props) {
     });
   }, [param]);
 
-  useEffect(() => {
-    console.log(currServerData)
-  }, [currServerData])
-  
-
   const handleSave = (e) => {
     axios({
       method: "post",

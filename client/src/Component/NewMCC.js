@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "./NavBar";
-import Profile from "./Profile";
+import Profile from "./ProfileComponent/Profile";
 import { Routes, Route } from "react-router-dom";
 import InputOutput from "./IOComponent/InputOutput";
 import ControlSummary from "./ConfigComponent/ControlSummary";
+import axios from "axios";
 
 export default function NewMCC(props) {
   const [username, setUsername] = useState(""); //TODO: Set to ""
@@ -13,6 +14,9 @@ export default function NewMCC(props) {
   const [currentFileName, setCurrentFileName] = useState(""); // Also used as flag when user clicks back to edit filename
   const [profileLoading, setProfileLoading] = useState(false);
 
+  const [isImporting, setIsImporting] = useState(false)
+
+
   //DEMO PURPOSES
   // const [totalNumSessions, settotalNumSessions] = useState(["11000000","13000000","10000000","17000000","19000000",]);
   // const [totalTraffic, settotalTraffic] = useState(["74", "84", "94", "84", "100"]);
@@ -21,30 +25,21 @@ export default function NewMCC(props) {
   // const [numUplane, setnumUplane] = useState(["2", "2", "2", "2", "2"]);
 
   //Input Table & Output Table related data
-  const [totalNumSessions, settotalNumSessions] = useState(["", "", "", "", ""]);
-  const [totalTraffic, settotalTraffic] = useState(["", "", "", "", ""]);
-  const [numSites, setnumSites] = useState(["", "", "", "", ""]);
-  const [numCplane, setnumCplane] = useState(["", "", "", "", ""]);
-  const [numUplane, setnumUplane] = useState(["", "", "", "", ""]);
+  const [totalNumSessions, settotalNumSessions] = useState(['','','','','']);
+  const [totalTraffic, settotalTraffic] = useState(['','','','','']);
+  const [numSites, setnumSites] = useState(['','','','','']);
+  const [numCplane, setnumCplane] = useState(['','','','','']);
+  const [numUplane, setnumUplane] = useState(['','','','','']);
 
   const [outputData, setoutputData] = useState({}); //TODO: set empty obj
   const [isOutputLoading, setisOutputLoading] = useState(false); //TODO: set false
+  
   const didMount = useRef(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setoutputData({});
     setisOutputLoading(true); //triggers the useeffect below regarding the isOutputLoading variable
-  };
-
-  // useEffect(() => {
-  //   console.log(username, description, ticket)
-
-  // }, [username, description, ticket])
-
-  const isEmpty = (obj) => {
-    //check if object is empty
-    return Object.keys(obj).length === 0;
   };
 
   useEffect(() => {
@@ -54,28 +49,20 @@ export default function NewMCC(props) {
       didMount.current = true;
       return;
     }
-    if (isOutputLoading && isEmpty(outputData)) {
+    if (isOutputLoading) {
       //ensures that we only fetch when condition of outputloading and outputdata being empty is true
-      fetch("/mcc/" + currentFileName, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          totalNumSessions,
-          totalTraffic,
-          numSites,
-          numCplane,
-          numUplane,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setoutputData(data);
-          setisOutputLoading(false);
-        });
+      axios.post("/mcc/" + currentFileName, {
+        totalNumSessions,
+        totalTraffic,
+        numSites,
+        numCplane,
+        numUplane,
+      }).then((response) => {
+        setoutputData(response.data);
+        setisOutputLoading(false);
+      });
     }
-  }, [outputData, isOutputLoading]);
+  }, [isOutputLoading]);
 
   const handleChange = (e, row) => {
     const id = parseInt(e.target.id.split("_")[1]);
@@ -130,6 +117,13 @@ export default function NewMCC(props) {
           setCurrentFileName={setCurrentFileName}
           profileLoading={profileLoading}
           setProfileLoading={setProfileLoading}
+          setisOutputLoading={setisOutputLoading}
+          settotalNumSessions={settotalNumSessions}
+          settotalTraffic={settotalTraffic}
+          setnumSites={setnumSites}
+          setnumCplane={setnumCplane}
+          setnumUplane={setnumUplane}
+          setIsImporting={setIsImporting}
         />
       ) : (
         <>
@@ -161,6 +155,7 @@ export default function NewMCC(props) {
                   numSites={numSites}
                   numCplane={numCplane}
                   numUplane={numUplane}
+                  isImporting={isImporting}
                 />
               }
             />

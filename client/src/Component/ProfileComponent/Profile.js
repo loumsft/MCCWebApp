@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ImportComponent from "./ImportComponent";
 
 function Profile(props) {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ function Profile(props) {
     } else {
       //edit the current file name if already existed
       let filenamearr = props.currentFileName.split("_");
-      let newFileName =
+      let newFileName = 
         filenamearr.at(-6) +
         "_" +
         filenamearr.at(-5) +
@@ -182,6 +183,9 @@ function Profile(props) {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <ImportComponent {...props}/>
+
         {props.currentFileName && props.currentFileName.length !== 0 && (
           <Button
             onClick={(e) => handleCancel(e)}
@@ -191,6 +195,7 @@ function Profile(props) {
             Cancel
           </Button>
         )}
+        
         <Button
           disabled={props.profileLoading}
           id='profileSubmitButton'
