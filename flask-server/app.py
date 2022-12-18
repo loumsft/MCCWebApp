@@ -55,7 +55,7 @@ def getInputTable(filename):
             if inputTable["numUplane"][i] == None:
                 inputTable["numUplane"][i] = ""
         return inputTable
-        
+    
     with xw.App(visible=False) as app:
         book = app.books.open(filename)
         sheet = book.sheets['Input & Output']
@@ -87,7 +87,6 @@ def updateInputTable(filename, totalNumSessions, totalTraffic, numSites, numCpla
             numUplane[0], numUplane[1], numUplane[2], numUplane[3], numUplane[4]]
         book.save()
         book.close()
-
 
 def getOutputTable(filename):
     with xw.App(visible=False) as app:
@@ -205,68 +204,70 @@ def getOutputTable(filename):
         'numMSMvCPUTotalCCUP': numMSMvCPUTotalCCUP,
     }
 
-
-@app.route("/control/<filename>", methods=['GET', 'POST'], strict_slashes=False)
-def updateControlSummarySheet(filename):
-    response = []
-    pythoncom.CoInitialize()
+def updateControlSummarySheet(filename, data):
     with xw.App(visible=False) as app:
         book = app.books.open(filename)
         sheet = book.sheets['Control & Summary']
-
-        # TODO: USE sheet['variableName'].expand().value for table in future iterations
-        # grab the next available column in parameter table and send to frontend
         # returns a range object consisting address of parameter table.
         parameterTable = sheet['F21'].expand()
+        
+        # grab the next available column in parameter table and send to frontend
         startingColumn = parameterTable.column + 1
         startingRow = parameterTable.row
-        if request.method == 'GET':
-            response = getControlSummarySheet(filename)
-        elif request.method == 'POST':
-            data = request.get_json()
-            # Master Control settings
-            sheet.range('C4').value = data["masterControl"][0]["data"]
-            sheet.range(
-                'SSM_ISM__Number_of_vCPU_s').value = data["masterControl"][1]["data"]
-            sheet.range(
-                'CPM_DCM_CCM__Number_of_vCPU_s').value = data["masterControl"][2]["data"]
-            sheet.range(
-                'MCM__Number_of_vCPU_s').value = data["masterControl"][3]["data"]
-            sheet.range(
-                'SSM_ISM__Memory__GB').value = data["masterControl"][4]["data"]
-            sheet.range('CPM__Memory__GB').value = data["masterControl"][5]["data"]
-            sheet.range('MCM__Memory__GB').value = data["masterControl"][6]["data"]
-            sheet.range(
-                'Max_session_per_ISM').value = data["masterControl"][7]["data"]
-            sheet.range(
-                'Max_session_per_CPM').value = data["masterControl"][8]["data"]
-            sheet.range(
-                'Control_Plane_CPU_engineering_limit').value = data["masterControl"][9]["data"]
-            sheet.range(
-                'User_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
-            sheet.range(
-                'Control_Plane_Memory_engineering_limit').value = data["masterControl"][11]["data"]
-            sheet.range(
-                'User_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
-            sheet.range(
-                'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][13]["data"]
-            sheet.range(
-                'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][14]["data"]
-
-            # UP Cluster Related Parameters
-            sheet.range(
-                'User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
-            response = "Data post to control & summary successful"
-
-            # TODO: Post and update the customized parameter section as well.
-            #add new customized parameter column to excel parameter table
-            
-            #editable parameters begin on the 5th index in data["defaultCustomizedParams][i]["data"]
-            for row in range(len(data["defaultCustomizedParams"])):
-                for col in range(4, len(data["defaultCustomizedParams"][row]["data"])):
-                    sheet.range((startingRow + row, startingColumn + col)).value = data["defaultCustomizedParams"][row]["data"][col]
+        # Master Control settings
+        sheet.range('C4').value = data["masterControl"][0]["data"]
+        sheet.range(
+            'SSM_ISM__Number_of_vCPU_s').value = data["masterControl"][1]["data"]
+        sheet.range(
+            'CPM_DCM_CCM__Number_of_vCPU_s').value = data["masterControl"][2]["data"]
+        sheet.range(
+            'MCM__Number_of_vCPU_s').value = data["masterControl"][3]["data"]
+        sheet.range(
+            'SSM_ISM__Memory__GB').value = data["masterControl"][4]["data"]
+        sheet.range('CPM__Memory__GB').value = data["masterControl"][5]["data"]
+        sheet.range('MCM__Memory__GB').value = data["masterControl"][6]["data"]
+        sheet.range(
+            'Max_session_per_ISM').value = data["masterControl"][7]["data"]
+        sheet.range(
+            'Max_session_per_CPM').value = data["masterControl"][8]["data"]
+        # sheet.range('Max_session_per_cluster').value = data["masterControl"][9]["data"]
+        sheet.range(
+            'Control_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
+        sheet.range(
+            'User_Plane_CPU_engineering_limit').value = data["masterControl"][11]["data"]
+        sheet.range(
+            'Control_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
+        sheet.range(
+            'User_Plane_Memory_engineering_limit').value = data["masterControl"][13]["data"]
+        sheet.range(
+            'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][14]["data"]
+        sheet.range(
+            'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][15]["data"]
+        
+        # UP Cluster Related Parameters
+        sheet.range(
+            'User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
+        response = "Data post to control & summary successful"
+                
+        #editable parameters begin on the 5th index in data["defaultCustomizedParams][i]["data"]
+        for row in range(len(data["defaultCustomizedParams"])):
+            for col in range(4, len(data["defaultCustomizedParams"][row]["data"])):
+                sheet.range((startingRow + row, startingColumn + col)).value = data["defaultCustomizedParams"][row]["data"][col]
         book.save()
         book.close()
+    return response
+
+@app.route("/control/<filename>", methods=['GET', 'POST'], strict_slashes=False)
+def ControlSummarySheet(filename):
+    pythoncom.CoInitialize()
+    response = []
+    # TODO: USE sheet['variableName'].expand().value for table in future iterations
+    
+    if request.method == 'GET':
+        response = getControlSummarySheet(filename)
+    elif request.method == 'POST':
+        data = request.get_json()
+        response = updateControlSummarySheet(filename, data)
     pythoncom.CoUninitialize()
     return response
 
@@ -602,6 +603,7 @@ def getControlSummarySheet(filename):
         book.save()
         book.close()
     return response
+
 # Create new Excel file based on username, description, ticket and the universal sizing model we have.
 @app.route("/createbook", methods=["POST"], strict_slashes=False)
 def createBook():
@@ -633,17 +635,26 @@ def renameBook():
         os.rename(data["currentFileName"], data["newFileName"])
     return data["newFileName"]
 
-@app.route("/import", methods=["GET"], strict_slashes=False)
-def importSizingModel():
-    #Get input table, and config table.
+@app.route("/import", methods=["POST"], strict_slashes=False)
+def importSizingModel():#create new session from imported input table, config table.
+    data = request.get_json()
+    #create new session with parameter filename
+    filename = data['fileName']
     pythoncom.CoInitialize()
-    filename = request.args.get('fileName')
+    with xw.App(visible=False) as app:
+        book = app.books.open("MCC Sizing Model v1.4.xlsx")
+        book.save(filename)
+        book.close()
+    
+    inputTable = data['inputTable']
+    configTable = data['configTable']
+    updateInputTable(filename, inputTable['Total number of sessions'], inputTable['Total traffic (Gbps)'], inputTable['Number of sites (For Integrated MCC)'], inputTable['Number of C-plane sites'], inputTable['Number of U-plane sites'])
+    updateControlSummarySheet(filename, configTable)
     inputTable = getInputTable(filename)
-    # outputTable = getOutputTable(fileName)
-    # configTable = getControlSummarySheet(filename)
     pythoncom.CoUninitialize()
     return {
-        "inputTable": inputTable
+        "inputTable": inputTable,
+        "configTable": configTable
     }
 
 

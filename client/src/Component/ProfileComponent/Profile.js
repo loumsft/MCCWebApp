@@ -38,6 +38,7 @@ function Profile(props) {
 
   const handleCancel = (e) => {
     e.preventDefault();
+    navigate("/mcc/io");
     props.setShowProfile(false);
   };
 

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -49,10 +49,6 @@ export const rows = [
 ];
 
 function InputTable(props) {
-
-  useEffect(() => {
-    console.log(props.totalNumSessions)
-  }, [props.totalNumSessions])
   
   const setInputValue = (rowDataArr, index) => {
     if (rowDataArr && rowDataArr[index]){
