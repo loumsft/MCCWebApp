@@ -53,49 +53,11 @@ function Profile(props) {
     props.setDescription(description);
     props.setTicket(ticket);
     props.setShowProfile(false);
-    props.setProfileLoading(true);
 
     if (!props.currentFileName && props.currentFileName.length === 0) {
       //make new file if no current file name
-      axios
-        .post("/createbook", {
-          username,
-          description,
-          ticket,
-        })
-        .then((response) => {
-          props.setCurrentFileName(response.data);
-          props.setProfileLoading(false);
-        });
-    } else {
-      //edit the current file name if already existed
-      let filenamearr = props.currentFileName.split("_");
-      let newFileName = 
-        filenamearr.at(-6) +
-        "_" +
-        filenamearr.at(-5) +
-        "_" +
-        filenamearr.at(-4) +
-        "_" +
-        filenamearr.at(-3) +
-        "_" +
-        filenamearr.at(-2) +
-        "_" +
-        filenamearr.at(-1);
-      if (ticket !== "") {
-        newFileName = ticket + "_" + newFileName;
-      }
-      if (description !== "") {
-        newFileName = description + "_" + newFileName;
-      }
-      if (username !== "") {
-        newFileName = username + "_" + newFileName;
-      }
-      axios
-        .post("/renamebook", {
-          currentFileName: props.currentFileName,
-          newFileName,
-        })
+      props.setProfileLoading(true);
+      axios.get("/createbook")
         .then((response) => {
           props.setCurrentFileName(response.data);
           props.setProfileLoading(false);

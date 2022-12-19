@@ -50,7 +50,7 @@ export default function NewMCC(props) {
       return;
     }
     if (isOutputLoading) {
-      //ensures that we only fetch when condition of outputloading and outputdata being empty is true
+      //ensures that we only fetch when condition of outputloading
       axios.post("/mcc/" + currentFileName, {
         totalNumSessions,
         totalTraffic,
@@ -131,6 +131,7 @@ export default function NewMCC(props) {
             currentFileName={currentFileName}
             handleSubmit={handleSubmit}
             setShowProfile={setShowProfile}
+            isImporting={isImporting}
           />
           <Routes>
             <Route

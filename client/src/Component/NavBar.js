@@ -25,10 +25,17 @@ function HideOnScroll(props) {
   );
 }
 
+
 function NavBar(props) {
   const onClickProfileHandler = () => {
     props.setShowProfile(true);
   };
+
+  React.useEffect(() => {
+    console.log(props.isImporting)
+
+  }, [props.isImporting])
+  
   return (
     <HideOnScroll {...props}>
       <AppBar>
@@ -38,30 +45,37 @@ function NavBar(props) {
           </Typography>
           {props.currentFileName ? (
             <Typography edge='start' variant='h6' component='div'>
-              {props.currentFileName}
+              {props.currentFileName.substring(0, props.currentFileName.lastIndexOf('.xlsx'))}
             </Typography>
           ) : (
-            <CircularProgress color='inherit' />
+            <CircularProgress style={{'color': 'white'}}/>
           )}
-          <div>
-            <Link to='/mcc/io'>
-              <Button variant='outlined' sx={{ color: "white" }}>
-                I/O
+          {props.isImporting?
+              <CircularProgress style={{'color': 'white'}}/>
+            :
+            <div>
+              <Link to='/mcc/io'>
+                <Button variant='outlined' sx={{ color: "white" }}>
+                  I/O
+                </Button>
+              </Link>
+              <Button
+                variant='outlined'
+                onClick={onClickProfileHandler}
+                sx={{ color: "white" }}
+              >
+                <AccountCircleIcon />
               </Button>
-            </Link>
-            <Button
-              variant='outlined'
-              onClick={onClickProfileHandler}
-              sx={{ color: "white" }}
-            >
-              <AccountCircleIcon />
-            </Button>
-            <Link to='/mcc/control'>
-              <Button variant='outlined' sx={{ color: "white" }}>
-                <SettingsIcon />
-              </Button>
-            </Link>
-          </div>
+              
+                <Link to='/mcc/control' >
+                  <Button variant='outlined' sx={{ color: "white" }} >
+                      <SettingsIcon />
+                  </Button>
+                </Link>
+              
+              
+            </div>
+          }
         </Toolbar>
       </AppBar>
     </HideOnScroll>

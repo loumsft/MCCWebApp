@@ -8,6 +8,8 @@ export default function ImportInputHelper(wb, sheets) {
     const configRows = utils.sheet_to_json(wb.Sheets[sheets[configIndex]], {header: 1});
 
     const masterControlArr = configRows.slice(3, 19)
+    //take out the max session per cluster 
+    masterControlArr.splice(9, 1)
     configTable["masterControl"] = masterControlArr.map((element, index) => {
         let data = ""
         if (element[1]){
@@ -18,7 +20,7 @@ export default function ImportInputHelper(wb, sheets) {
             "data": data
         }
     })
-    
+
     const paramArr = configRows.slice(20) //need to split uprelated params and defined params table.
 
     configTable["UPClusterRelatedParams"] = paramArr.map((element,index) => {

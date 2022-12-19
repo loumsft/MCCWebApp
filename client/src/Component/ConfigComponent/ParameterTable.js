@@ -10,9 +10,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
+import PacketSwitchMenuComponent from './PacketSwitchMenuComponent';
 
 const ValidationTextField = styled(TextField)({
   "& input:valid + fieldset": {
@@ -44,11 +44,12 @@ function ParameterTable(props) {
     }));
     setDisableAdd(true)
   }
+
+
   
   const onChange = (e, rowIndex, columnIndex) => {
     const newRowData = props.paramsData
     newRowData[rowIndex]['data'][columnIndex] = e.target.value
-
     props.setCurrServerData((prevServerData) => ({
       ...prevServerData,
       defaultCustomizedParams: newRowData
@@ -89,9 +90,9 @@ function ParameterTable(props) {
             </TableRow>
           </TableHead>
           <TableBody sx={{overflow:"auto"}}>
-            {props.paramsData.map((row, index) => {
+            {props.paramsData.map((row, rowIndex) => {
               return (
-                index !== 0 && (
+                rowIndex !== 0 && (
                   <>
                     <TableRow
                       key={row.id}
@@ -103,18 +104,36 @@ function ParameterTable(props) {
                         {row.name}
                       </TableCell>
                       {
-                        row.data.map((element, j) => {
+                        row.data.map((element, colIndex) => {
                           return (
-                            j >= 4 ?( //num of defined parameters + title
-                              <TableCell align='center' key={j} sx={{width: "10%"}}>
-                                <ValidationTextField
-                                  onChange={(e) => onChange(e, index, j)}
-                                  // variant="outlined"
-                                  autoFocus={row.title === "Total number of sessions"}
-                                  value={element || ""}
-                                  // fullWidth
-                                  
-                                />
+                            colIndex >= 4 ?( //num of defined parameters + title
+                              <TableCell align='center' key={colIndex} sx={{width: "10%"}}>
+                                {/* //TODO: fix the packet switching tech (PST) doesn't work atm because not sure how to add more dropdown usestate variables. */}
+                                {rowIndex === 1? (
+                                  <PacketSwitchMenuComponent
+                                    onChange={onChange}
+                                    colIndex={colIndex}
+                                    element={element}
+                                    rowIndex={rowIndex}
+                                  />
+                                ):(
+                                  <ValidationTextField
+                                    onChange={(e) => onChange(e, rowIndex, colIndex)}
+                                    // variant="outlined"
+                                    autoFocus={row.title === "Total number of sessions"}
+                                    value={element || ""}
+                                    // fullWidth
+                                    
+                                  />
+                                )}
+                                {/* <ValidationTextField
+                                    onChange={(e) => onChange(e, rowIndex, colIndex)}
+                                    // variant="outlined"
+                                    autoFocus={row.title === "Total number of sessions"}
+                                    value={element || ""}
+                                    // fullWidth
+                                    
+                                  /> */}
                               </TableCell>
                             ):(
                               <TableCell align='center' >

@@ -74,6 +74,11 @@ export default function ControlSummary(props) {
     });
   }, [param]);
 
+  useEffect(() => {
+    // console.log(currServerData)
+  }, [currServerData])
+  
+
   const handleSave = (e) => {
     axios({
       method: "post",
@@ -141,6 +146,7 @@ export default function ControlSummary(props) {
                   fullWidth
                   variant='standard'
                   defaultValue={setting.data}
+                  disabled={setting.id==="gatewayType"}
                   onChange={(e) => onChange(e, activeStep, index)}
                 />
               );

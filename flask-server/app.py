@@ -230,19 +230,18 @@ def updateControlSummarySheet(filename, data):
             'Max_session_per_ISM').value = data["masterControl"][7]["data"]
         sheet.range(
             'Max_session_per_CPM').value = data["masterControl"][8]["data"]
-        # sheet.range('Max_session_per_cluster').value = data["masterControl"][9]["data"]
         sheet.range(
-            'Control_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
+            'Control_Plane_CPU_engineering_limit').value = data["masterControl"][9]["data"]
         sheet.range(
-            'User_Plane_CPU_engineering_limit').value = data["masterControl"][11]["data"]
+            'User_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
         sheet.range(
-            'Control_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
+            'Control_Plane_Memory_engineering_limit').value = data["masterControl"][11]["data"]
         sheet.range(
-            'User_Plane_Memory_engineering_limit').value = data["masterControl"][13]["data"]
+            'User_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
         sheet.range(
-            'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][14]["data"]
+            'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][13]["data"]
         sheet.range(
-            'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][15]["data"]
+            'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][14]["data"]
         
         # UP Cluster Related Parameters
         sheet.range(
@@ -605,20 +604,13 @@ def getControlSummarySheet(filename):
     return response
 
 # Create new Excel file based on username, description, ticket and the universal sizing model we have.
-@app.route("/createbook", methods=["POST"], strict_slashes=False)
+@app.route("/createbook", methods=["GET"], strict_slashes=False)
 def createBook():
-    data = request.get_json()
     pythoncom.CoInitialize()
     with xw.App(visible=False) as app:
         book = app.books.open("MCC Sizing Model v1.4.xlsx")
         now = datetime.now()
         newTitle = now.strftime("%Y_%m_%d_%H_%M_%S") + '.xlsx'
-        if data['ticket']:
-            newTitle = data['ticket'] + "_" + newTitle
-        if data['description']:
-            newTitle = data['description'] + "_" + newTitle
-        if data['username']:
-            newTitle = data['username'] + "_" + newTitle
         book.save(newTitle)
         book.close()
     pythoncom.CoUninitialize()
@@ -640,11 +632,15 @@ def importSizingModel():#create new session from imported input table, config ta
     data = request.get_json()
     #create new session with parameter filename
     filename = data['fileName']
+    print()
     pythoncom.CoInitialize()
     with xw.App(visible=False) as app:
-        book = app.books.open("MCC Sizing Model v1.4.xlsx")
-        book.save(filename)
-        book.close()
+        if (os.path.exists(filename)):
+            print('filename exists, opening the saved session.')
+        else:
+            book = app.books.open("MCC Sizing Model v1.4.xlsx")
+            book.save(filename)
+            book.close()
     
     inputTable = data['inputTable']
     configTable = data['configTable']
