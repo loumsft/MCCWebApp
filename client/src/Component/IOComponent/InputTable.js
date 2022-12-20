@@ -26,16 +26,7 @@ const ValidationTextField = styled(TextField)({
   },
 });
 
-
-
 function InputTable(props) {
-  
-  const setInputValue = (rowDataArr, index) => {
-    if (rowDataArr && rowDataArr[index]){
-      return rowDataArr[index]
-    }
-    return ""
-  }
   
   return (
     <div>
@@ -63,49 +54,22 @@ function InputTable(props) {
                 <TableCell component='th' scope='row'>
                   {row.title}
                 </TableCell>
-                <TableCell align='right'>
-                  <ValidationTextField
-                    required
-                    id={row.id + "_0"} //year1
-                    label='Required'
-                    onChange={(e) => props.handleChange(e, row.title)}
-                    variant='outlined'
-                    autoFocus={row.title === "Total number of sessions"}
-                    value={setInputValue(props[row.id], 0)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
-                  />
-                </TableCell>
-                <TableCell align='right'>
-                  <ValidationTextField
-                    id={row.id + "_1"} //year2
-                    onChange={(e) => props.handleChange(e, row.title)}
-                    variant='outlined'
-                    value={setInputValue(props[row.id], 1)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
-                  />
-                </TableCell>
-                <TableCell align='right'>
-                  <ValidationTextField
-                    id={row.id + "_2"} //year3
-                    onChange={(e) => props.handleChange(e, row.title)}
-                    variant='outlined'
-                    value={setInputValue(props[row.id], 2)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
-                  />
-                </TableCell>
-                <TableCell align='right'>
-                  <ValidationTextField
-                    id={row.id + "_3"} //year4
-                    onChange={(e) => props.handleChange(e, row.title)}
-                    variant='outlined'
-                    value={setInputValue(props[row.id], 3)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
-                  />
-                </TableCell>
-                <TableCell align='right'>
-                  <ValidationTextField
-                    id={row.id + "_4"} //year5
-                    onChange={(e) => props.handleChange(e, row.title)}
-                    variant='outlined'
-                    value={setInputValue(props[row.id], 4)} //TODO: FOR DEMO PURPOSE, REMOVE ONCE DONE
-                  />
-                </TableCell>
+                {['year1', 'year2', 'year3', 'year4', 'year5'].map((year, index) => (
+                    <TableCell align='right' key={index}> 
+                      <ValidationTextField
+                        required={index===0}//only first year is required
+                        name={row.id}
+                        inputProps={{
+                          'data-key': index
+                        }}
+                        label={index === 0 ? 'Required': null}//only the first year needs required label.
+                        onChange={props.handleChangeNew}
+                        variant='outlined'
+                        autoFocus={row.title === "Total number of sessions" && index === 0}
+                        value={props.inputTable[row.id][index] || ""}
+                      />
+                    </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>

@@ -34,6 +34,7 @@ function SimpleDialog(props) {
           props.setShowProfile(false);
           props.setCurrentFileName(file.name);
           props.setIsImporting(true)
+          props.setoutputData({})
           axios.post("/import", { 
                 fileName: file.name,
                 inputTable: inputTable,
@@ -42,13 +43,7 @@ function SimpleDialog(props) {
             )
             .then((response) => {
               //set the input table from import response
-              props.settotalNumSessions(
-                response.data.inputTable.totalNumSessions
-              );
-              props.settotalTraffic(response.data.inputTable.totalTraffic);
-              props.setnumSites(response.data.inputTable.numSites);
-              props.setnumCplane(response.data.inputTable.numCplane);
-              props.setnumUplane(response.data.inputTable.numUplane);
+              props.setInputTable(response.data.inputTable);
             })
             .then((response) => {
               props.setIsImporting(false);

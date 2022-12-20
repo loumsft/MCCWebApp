@@ -16,20 +16,24 @@ export default function NewMCC(props) {
 
   const [isImporting, setIsImporting] = useState(false)
 
-
   //DEMO PURPOSES
-  // const [totalNumSessions, settotalNumSessions] = useState(["11000000","13000000","10000000","17000000","19000000",]);
-  // const [totalTraffic, settotalTraffic] = useState(["74", "84", "94", "84", "100"]);
-  // const [numSites, setnumSites] = useState(["2", "2", "2", "2", "2"]);
-  // const [numCplane, setnumCplane] = useState(["2", "2", "2", "2", "2"]);
-  // const [numUplane, setnumUplane] = useState(["2", "2", "2", "2", "2"]);
+  // const initialInputValues = {
+  //   totalNumSessions: ["11000000","13000000","10000000","17000000","19000000",],
+  //   totalTraffic: ["74", "84", "94", "84", "100"],
+  //   numSites: ["2", "2", "2", "2", "2"],
+  //   numCplane: ["2", "2", "2", "2", "2"],
+  //   numUplane: ["2", "2", "2", "2", "2"],
+  // }
 
   //Input Table & Output Table related data
-  const [totalNumSessions, settotalNumSessions] = useState(['','','','','']);
-  const [totalTraffic, settotalTraffic] = useState(['','','','','']);
-  const [numSites, setnumSites] = useState(['','','','','']);
-  const [numCplane, setnumCplane] = useState(['','','','','']);
-  const [numUplane, setnumUplane] = useState(['','','','','']);
+  const initialInputValues = {
+    totalNumSessions: ["","","","",""],
+    totalTraffic: ["","","","",""],
+    numSites: ["","","","",""],
+    numCplane: ["","","","",""],
+    numUplane: ["","","","",""],
+  }
+  const [inputTable, setInputTable] = useState(initialInputValues)
 
   const [outputData, setoutputData] = useState({}); //TODO: set empty obj
   const [isOutputLoading, setisOutputLoading] = useState(false); //TODO: set false
@@ -52,11 +56,11 @@ export default function NewMCC(props) {
     if (isOutputLoading) {
       //ensures that we only fetch when condition of outputloading
       axios.post("/mcc/" + currentFileName, {
-        totalNumSessions,
-        totalTraffic,
-        numSites,
-        numCplane,
-        numUplane,
+        totalNumSessions: inputTable.totalNumSessions,
+        totalTraffic: inputTable.totalTraffic,
+        numSites: inputTable.numSites,
+        numCplane: inputTable.numCplane,
+        numUplane: inputTable.numUplane,
       }).then((response) => {
         setoutputData(response.data);
         setisOutputLoading(false);
@@ -64,43 +68,21 @@ export default function NewMCC(props) {
     }
   }, [isOutputLoading]);
 
-  const handleChange = (e, row) => {
-    const id = parseInt(e.target.id.split("_")[1]);
-    let updateArray;
-    switch (row) {
-      case "Total number of sessions":
-        updateArray = Array.from(totalNumSessions);
-        updateArray[id] = e.target.value;
-        settotalNumSessions(updateArray);
-        break;
-      case "Total traffic (Gbps)":
-        updateArray = Array.from(totalTraffic);
-        updateArray[id] = e.target.value;
-        settotalTraffic(updateArray);
+  useEffect(() => {//testing inputtable
+    // console.log(inputTable)
 
-        break;
-      case "Number of sites (For Integrated MCC)":
-        updateArray = Array.from(numSites);
-        updateArray[id] = e.target.value;
-        setnumSites(updateArray);
-        break;
-      case "Number of C-plane sites":
-        updateArray = Array.from(numCplane);
-        updateArray[id] = e.target.value;
-        setnumCplane(updateArray);
-        break;
+  }, [inputTable])
+  
 
-      case "Number of U-plane sites":
-        updateArray = Array.from(numUplane);
-        updateArray[id] = e.target.value;
-        setnumUplane(updateArray);
-        break;
-
-      default:
-        //error handling here
-        console.error("unseen case: ", row);
-    }
-  };
+  const handleChangeNew = (e, row) => {
+    const {name, value} = e.target
+    const newArr = inputTable[name]
+    newArr[e.target.dataset.key] = value
+    setInputTable((prevState) => ({
+      ...prevState,
+      [name]: newArr,
+    }))
+  }
 
   return (
     <>
@@ -117,13 +99,9 @@ export default function NewMCC(props) {
           setCurrentFileName={setCurrentFileName}
           profileLoading={profileLoading}
           setProfileLoading={setProfileLoading}
-          setisOutputLoading={setisOutputLoading}
-          settotalNumSessions={settotalNumSessions}
-          settotalTraffic={settotalTraffic}
-          setnumSites={setnumSites}
-          setnumCplane={setnumCplane}
-          setnumUplane={setnumUplane}
           setIsImporting={setIsImporting}
+          setInputTable={setInputTable}
+          setoutputData={setoutputData}
         />
       ) : (
         <>
@@ -139,7 +117,6 @@ export default function NewMCC(props) {
               element={
                 <InputOutput
                   handleSubmit={handleSubmit}
-                  handleChange={handleChange}
                   currentFileName={currentFileName}
                   setCurrentFileName={setCurrentFileName}
                   outputData={outputData}
@@ -151,12 +128,9 @@ export default function NewMCC(props) {
                   setDescription={setDescription}
                   ticket={ticket}
                   setTicket={setTicket}
-                  totalNumSessions={totalNumSessions}
-                  totalTraffic={totalTraffic}
-                  numSites={numSites}
-                  numCplane={numCplane}
-                  numUplane={numUplane}
                   isImporting={isImporting}
+                  inputTable={inputTable}
+                  handleChangeNew={handleChangeNew}
                 />
               }
             />
