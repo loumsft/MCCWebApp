@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
-import { rows } from "./InputTable";
+import { inputRows } from "./inputRows";
 
 export default function Session(props) {
   const [open, setOpen] = useState(false);
@@ -26,22 +26,18 @@ export default function Session(props) {
     props.setUsername(newUsername);
     props.setDescription(newDescription);
     props.setTicket(newTicket);
-    rows.forEach((row) => {
-      document.getElementById(row.id + "_0").value = "";
-      document.getElementById(row.id + "_1").value = "";
-      document.getElementById(row.id + "_2").value = "";
-      document.getElementById(row.id + "_3").value = "";
-      document.getElementById(row.id + "_4").value = "";
-    });
+    // inputRows.forEach((row) => {//TODO: make clear all entries function
+    //   console.log(document.getElementById(row.id+"_0"))
+    //   document.getElementById(row.id + "_0").reset();
+    //   document.getElementById(row.id + "_1").reset();
+    //   document.getElementById(row.id + "_2").reset();
+    //   document.getElementById(row.id + "_3").reset();
+    //   document.getElementById(row.id + "_4").reset();
+    // });
     axios({
       //asynchronously happens
-      method: "post",
-      url: "/createbook",
-      data: {
-        username: newUsername,
-        description: newDescription,
-        ticket: newTicket,
-      },
+      method: "get",
+      url: "/createbook"
     }).then((response) => {
       props.setCurrentFileName(response.data);
       props.setoutputData({});

@@ -32,7 +32,7 @@ function NavBar(props) {
   };
 
   React.useEffect(() => {
-    console.log(props.isImporting)
+    // console.log(props.isImporting)
 
   }, [props.isImporting])
   

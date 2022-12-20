@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import {inputRows} from './inputRows';
 
 const ValidationTextField = styled(TextField)({
   "& input:valid + fieldset": {
@@ -25,28 +26,7 @@ const ValidationTextField = styled(TextField)({
   },
 });
 
-export const rows = [
-  {
-    title: "Total number of sessions",
-    id: "totalNumSessions",
-  },
-  {
-    title: "Total traffic (Gbps)",
-    id: "totalTraffic",
-  },
-  {
-    title: "Number of sites (For Integrated MCC)",
-    id: "numSites",
-  },
-  {
-    title: "Number of C-plane sites",
-    id: "numCplane",
-  },
-  {
-    title: "Number of U-plane sites",
-    id: "numUplane",
-  },
-];
+
 
 function InputTable(props) {
   
@@ -75,7 +55,7 @@ function InputTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {inputRows.map((row) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
