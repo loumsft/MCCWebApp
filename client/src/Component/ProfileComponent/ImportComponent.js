@@ -33,6 +33,7 @@ function SimpleDialog(props) {
           const configTable = ImportConfigHelper(wb, sheets)
           props.setShowProfile(false);
           props.setCurrentFileName(file.name);
+          props.setEditingFileName(file.name)
           props.setIsImporting(true)
           props.setoutputData({})
           axios.post("/import", { 

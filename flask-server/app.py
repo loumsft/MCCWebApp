@@ -622,6 +622,7 @@ def renameBook():
     data = request.get_json()
     if os.path.isfile(data["newFileName"]):
         print("The file already exists")
+        return 'error file already exists'
     else:
         # Rename the file
         os.rename(data["currentFileName"], data["newFileName"])

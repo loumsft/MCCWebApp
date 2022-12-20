@@ -60,6 +60,7 @@ function Profile(props) {
       axios.get("/createbook")
         .then((response) => {
           props.setCurrentFileName(response.data);
+          props.setEditingFileName(response.data);
           props.setProfileLoading(false);
         });
     }
@@ -112,6 +113,7 @@ function Profile(props) {
                     id='name'
                     variant='outlined'
                     defaultValue={props.username}
+                    autoFocus
                   />
                 </TableCell>
               </TableRow>

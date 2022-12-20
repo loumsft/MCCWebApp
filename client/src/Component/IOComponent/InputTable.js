@@ -61,7 +61,7 @@ function InputTable(props) {
                         type="number"
                         name={row.id}
                         
-                        inputProps={{
+                        inputProps={{//lowercase inputProps targets the attributes of the input, not the props passed to the MUI component
                           'data-key': index,
                           min: '0'
                         }}

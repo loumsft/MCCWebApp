@@ -12,6 +12,7 @@ export default function NewMCC(props) {
   const [ticket, setTicket] = useState();
   const [showProfile, setShowProfile] = useState(true); //TODO: set true
   const [currentFileName, setCurrentFileName] = useState(""); // Also used as flag when user clicks back to edit filename
+  const [editingFileName, setEditingFileName] = useState("");
   const [profileLoading, setProfileLoading] = useState(false);
 
   const [isImporting, setIsImporting] = useState(false)
@@ -73,6 +74,10 @@ export default function NewMCC(props) {
 
   }, [inputTable])
   
+  useEffect(() => {//testing filename
+    // console.log(currentFileName, editingFileName)
+
+  }, [currentFileName])
 
   const handleChangeNew = (e, row) => {
     const {name, value} = e.target
@@ -97,6 +102,7 @@ export default function NewMCC(props) {
           setShowProfile={setShowProfile}
           currentFileName={currentFileName}
           setCurrentFileName={setCurrentFileName}
+          setEditingFileName={setEditingFileName}
           profileLoading={profileLoading}
           setProfileLoading={setProfileLoading}
           setIsImporting={setIsImporting}
@@ -107,9 +113,13 @@ export default function NewMCC(props) {
         <>
           <NavBar
             currentFileName={currentFileName}
+            setCurrentFileName={setCurrentFileName}
+            editingFileName={editingFileName}
+            setEditingFileName={setEditingFileName}
             handleSubmit={handleSubmit}
             setShowProfile={setShowProfile}
             isImporting={isImporting}
+
           />
           <Routes>
             <Route
@@ -119,6 +129,7 @@ export default function NewMCC(props) {
                   handleSubmit={handleSubmit}
                   currentFileName={currentFileName}
                   setCurrentFileName={setCurrentFileName}
+                  setEditingFileName={setEditingFileName}
                   outputData={outputData}
                   setoutputData={setoutputData}
                   isOutputLoading={isOutputLoading}

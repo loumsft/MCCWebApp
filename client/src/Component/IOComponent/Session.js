@@ -40,6 +40,7 @@ export default function Session(props) {
       url: "/createbook"
     }).then((response) => {
       props.setCurrentFileName(response.data);
+      props.setEditingFileName(response.data);
       props.setoutputData({});
       setOpen(false);
     });
