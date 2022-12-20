@@ -58,9 +58,12 @@ function InputTable(props) {
                     <TableCell align='right' key={index}> 
                       <ValidationTextField
                         required={index===0}//only first year is required
+                        type="number"
                         name={row.id}
+                        
                         inputProps={{
-                          'data-key': index
+                          'data-key': index,
+                          min: '0'
                         }}
                         label={index === 0 ? 'Required': null}//only the first year needs required label.
                         onChange={props.handleChangeNew}

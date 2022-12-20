@@ -11,22 +11,22 @@ function InputOutput(props) {
   };
 
   return (
-    <Box
-      component='form'
-      noValidate
-      autoComplete='off'
-      onSubmit={props.handleSubmit}
-      sx={{ paddingTop: "4em" }}
-    >
-      {props.isImporting ?(
-        <>
-          <br/>
-          <CircularProgress />
-        </>
-      ) :(
-        <InputTable {...props}/>
-      )}
-      
+    <>
+      <Box
+        component='form'
+        onSubmit={props.handleSubmit}
+        sx={{ paddingTop: "4em" }}
+      >
+        {props.isImporting ?(
+          <>
+            <br/>
+            <CircularProgress />
+          </>
+        ) :(
+          <InputTable {...props}/>
+        )}
+      </Box>
+
       {isEmpty(props.outputData) ? ( //checks for empty outputData
         props.isOutputLoading && (
           <>
@@ -39,7 +39,7 @@ function InputOutput(props) {
         <Output {...props} />
       )}
       <br />
-    </Box>
+    </>
   );
 }
 

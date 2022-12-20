@@ -87,8 +87,6 @@ function Profile(props) {
       <div>*This is an internal tool*</div>
       <Box
         component='form'
-        noValidate
-        autoComplete='off'
         onSubmit={handleSubmit}
       >
         <TableContainer
