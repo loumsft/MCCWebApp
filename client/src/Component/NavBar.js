@@ -53,18 +53,17 @@ function NavBar(props) {
   return (
     <HideOnScroll {...props}>
       <AppBar>
-        <Toolbar sx={{ justifyContent: "space-between", paddingRight: '0 !important' }}>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
           <Typography align='center' variant='h6' component='div'>
             MCC WebApp
           </Typography>
           {props.currentFileName ? (
-            <Typography sx={{width: '18em'}} variant='h6' component='div'>
+            <Typography sx={{width: '18em'}} variant='h7' component='div'>
               <form
                 onSubmit={handleFileNameSubmit}
               >
                 <TextField
                   fullWidth
-                  
                   variant="standard"
                   required
                   InputProps={{//different from inputProps

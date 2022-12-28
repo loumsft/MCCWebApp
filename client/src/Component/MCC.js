@@ -6,7 +6,7 @@ import InputOutput from "./IOComponent/InputOutput";
 import ControlSummary from "./ConfigComponent/ControlSummary";
 import axios from "axios";
 
-export default function NewMCC(props) {
+export default function MCC(props) {
   const [username, setUsername] = useState(""); //TODO: Set to ""
   const [description, setDescription] = useState("");
   const [ticket, setTicket] = useState();
