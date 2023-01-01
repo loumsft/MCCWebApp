@@ -70,10 +70,10 @@ function Profile(props) {
     <Paper
       elevation={24}
       sx={{
-        paddingTop: "1px",
         paddingBottom: "1em",
+        paddingTop: "1px",
         width: "75%",
-        margin: "1em auto 0 auto",
+        margin: "4.5em auto 0 auto",
         background: "linear-gradient(to right bottom, #007FFF, #0059B2 120%)",
         color: "white",
       }}

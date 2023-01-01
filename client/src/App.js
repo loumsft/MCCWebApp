@@ -3,6 +3,7 @@ import MCC from "./Component/MCC";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Error from "./Component/Error";
+import StepperComponent from './Component/StepperComponent'
 
 function App() {
   return (

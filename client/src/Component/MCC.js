@@ -91,6 +91,16 @@ export default function MCC(props) {
 
   return (
     <>
+      <NavBar
+        currentFileName={currentFileName}
+        setCurrentFileName={setCurrentFileName}
+        editingFileName={editingFileName}
+        setEditingFileName={setEditingFileName}
+        handleSubmit={handleSubmit}
+        setShowProfile={setShowProfile}
+        isImporting={isImporting}
+      />
+      
       {showProfile ? (
         <Profile
           username={username}
@@ -110,53 +120,43 @@ export default function MCC(props) {
           setoutputData={setoutputData}
         />
       ) : (
-        <>
-          <NavBar
-            currentFileName={currentFileName}
-            setCurrentFileName={setCurrentFileName}
-            editingFileName={editingFileName}
-            setEditingFileName={setEditingFileName}
-            handleSubmit={handleSubmit}
-            setShowProfile={setShowProfile}
-            isImporting={isImporting}
-
+        <Routes>
+          <Route
+            path='/io'
+            element={
+              <InputOutput
+                handleSubmit={handleSubmit}
+                currentFileName={currentFileName}
+                setCurrentFileName={setCurrentFileName}
+                setEditingFileName={setEditingFileName}
+                outputData={outputData}
+                setoutputData={setoutputData}
+                isOutputLoading={isOutputLoading}
+                username={username}
+                setUsername={setUsername}
+                description={description}
+                setDescription={setDescription}
+                ticket={ticket}
+                setTicket={setTicket}
+                isImporting={isImporting}
+                inputTable={inputTable}
+                handleChangeNew={handleChangeNew}
+              />
+            }
           />
-          <Routes>
-            <Route
-              path='/io'
-              element={
-                <InputOutput
-                  handleSubmit={handleSubmit}
-                  currentFileName={currentFileName}
-                  setCurrentFileName={setCurrentFileName}
-                  setEditingFileName={setEditingFileName}
-                  outputData={outputData}
-                  setoutputData={setoutputData}
-                  isOutputLoading={isOutputLoading}
-                  username={username}
-                  setUsername={setUsername}
-                  description={description}
-                  setDescription={setDescription}
-                  ticket={ticket}
-                  setTicket={setTicket}
-                  isImporting={isImporting}
-                  inputTable={inputTable}
-                  handleChangeNew={handleChangeNew}
-                />
-              }
-            />
-            <Route
-              path='/control'
-              element={
-                <ControlSummary
-                  currentFileName={currentFileName}
-                  handleSubmit={handleSubmit}
-                />
-              }
-            />
-          </Routes>
-        </>
+          <Route
+            path='/control'
+            element={
+              <ControlSummary
+                currentFileName={currentFileName}
+                handleSubmit={handleSubmit}
+              />
+            }
+          />
+        </Routes>
+        
       )}
+      
     </>
   );
 }
