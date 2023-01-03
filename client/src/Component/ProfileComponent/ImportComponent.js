@@ -5,13 +5,11 @@ import Dialog from "@mui/material/Dialog";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 import { read } from 'xlsx';
-import { useNavigate } from "react-router-dom";
 import ImportInputHelper from './ImportInputHelper';
 import ImportConfigHelper from './ImportConfigHelper';
 
 function SimpleDialog(props) {
   const { onClose, open } = props;
-  const navigate = useNavigate();
 
   const handleClose = () => {
     onClose();
@@ -20,7 +18,6 @@ function SimpleDialog(props) {
   const handleImport = (e) => {
     //import excel sheet
     e.preventDefault();
-    navigate("/mcc/io");
     const files = e.target.files;
     if (files.length) {
       const file = files[0];
@@ -31,11 +28,12 @@ function SimpleDialog(props) {
         if (sheets.length) {
           const inputTable = ImportInputHelper(wb, sheets)
           const configTable = ImportConfigHelper(wb, sheets)
-          props.setShowProfile(false);
+          props.setIsNewProfile(false);
           props.setCurrentFileName(file.name);
           props.setEditingFileName(file.name)
           props.setIsImporting(true)
           props.setoutputData({})
+          props.handleNext()
           axios.post("/import", { 
                 fileName: file.name,
                 inputTable: inputTable,
@@ -48,6 +46,7 @@ function SimpleDialog(props) {
             })
             .then((response) => {
               props.setIsImporting(false);
+              handleClose()
             });
         }
       };

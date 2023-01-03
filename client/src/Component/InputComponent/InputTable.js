@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import {inputRows} from './inputRows';
+import { Box } from "@mui/system";
 
 const ValidationTextField = styled(TextField)({
   "& input:valid + fieldset": {
@@ -29,7 +30,11 @@ const ValidationTextField = styled(TextField)({
 function InputTable(props) {
   
   return (
-    <div>
+    <Box
+      component='form'
+      onSubmit={props.handleSubmit}
+      sx={{paddingBottom:"1em"}}
+    >
       <TableContainer
         component={Paper}
         sx={{ margin: "auto", width: "90%", marginTop: "1em" }}
@@ -66,7 +71,7 @@ function InputTable(props) {
                           min: '0'
                         }}
                         label={index === 0 ? 'Required': null}//only the first year needs required label.
-                        onChange={props.handleChangeNew}
+                        onChange={props.handleInputUpdates}
                         variant='outlined'
                         autoFocus={row.title === "Total number of sessions" && index === 0}
                         value={props.inputTable[row.id][index] || ""}
@@ -88,7 +93,7 @@ function InputTable(props) {
       >
         Submit
       </Button>
-    </div>
+    </Box>
   );
 }
 

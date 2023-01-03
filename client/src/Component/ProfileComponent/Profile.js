@@ -9,12 +9,10 @@ import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/system";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ImportComponent from "./ImportComponent";
 
 function Profile(props) {
-  const navigate = useNavigate();
 
   const ValidationTextField = styled(TextField)({
     "& input:valid + fieldset": {
@@ -36,15 +34,13 @@ function Profile(props) {
     fontWeight: "bold",
   });
 
-  const handleCancel = (e) => {
+  const handleCancel = (e) => {//TODO: Do handle cancel case
     e.preventDefault();
-    navigate("/mcc/io");
-    props.setShowProfile(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/mcc/io");
+    props.handleNext()
     const username = document.getElementById("name").value;
     const description = document.getElementById("description").value;
     const ticket = document.getElementById("ticket").value;
@@ -52,7 +48,7 @@ function Profile(props) {
     props.setUsername(username);
     props.setDescription(description);
     props.setTicket(ticket);
-    props.setShowProfile(false);
+    props.setIsNewProfile(false);
 
     if (!props.currentFileName && props.currentFileName.length === 0) {
       //make new file if no current file name
@@ -73,7 +69,7 @@ function Profile(props) {
         paddingBottom: "1em",
         paddingTop: "1px",
         width: "75%",
-        margin: "4.5em auto 0 auto",
+        margin: "1em auto 0 auto",
         background: "linear-gradient(to right bottom, #007FFF, #0059B2 120%)",
         color: "white",
       }}
@@ -149,7 +145,7 @@ function Profile(props) {
 
         <ImportComponent {...props}/>
 
-        {props.currentFileName && props.currentFileName.length !== 0 && (
+        {/* {props.currentFileName && props.currentFileName.length !== 0 && (
           <Button
             onClick={(e) => handleCancel(e)}
             color='primary'
@@ -157,7 +153,7 @@ function Profile(props) {
           >
             Cancel
           </Button>
-        )}
+        )} */}
         
         <Button
           disabled={props.profileLoading}

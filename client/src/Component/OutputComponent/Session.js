@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
-import { inputRows } from "./inputRows";
+// import { inputRows } from "./inputRows";
 
 export default function Session(props) {
   const [open, setOpen] = useState(false);
@@ -42,6 +42,7 @@ export default function Session(props) {
       props.setCurrentFileName(response.data);
       props.setEditingFileName(response.data);
       props.setoutputData({});
+      props.setActiveStep(1)//set to the input table page
       setOpen(false);
     });
   };

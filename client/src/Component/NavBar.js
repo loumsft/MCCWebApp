@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TextField from "@mui/material/TextField";
 import axios from 'axios'
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -30,12 +32,12 @@ function HideOnScroll(props) {
 
 function NavBar(props) {
   const onClickProfileHandler = () => {
-    props.setShowProfile(true);
+    props.setActiveStep(0)
   };
 
   React.useEffect(() => {
     // console.log(props.isImporting)
-
+    
   }, [props.isImporting])
 
   const handleFileNameSubmit = (e) => {
@@ -54,9 +56,20 @@ function NavBar(props) {
     <HideOnScroll {...props}>
       <AppBar>
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography align='center' variant='h6' component='div'>
-            MCC WebApp
-          </Typography>
+          <div style={{display: 'flex'}}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={props.handleDrawerToggle}
+              sx={{ mr: 2, display: { xl: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography align='center' variant='h6' component='div'>
+              MCC WebApp
+            </Typography>
+          </div>
           {props.currentFileName ? (
             <Typography sx={{width: '18em'}} variant='h7' component='div'>
               <form
@@ -72,12 +85,14 @@ function NavBar(props) {
                       color: 'white',
                       fontSize: '1.25em',
                       
+                    },
+                    inputProps:{
+                      style: {
+                      textAlign: 'center'
+                      }
                     }
                   }}
-                  inputProps={{
-                    style: {
-                    textAlign: 'center'
-                  }}}
+                  
                   onBlur={(e) => props.setEditingFileName(props.currentFileName)} //on click away the file name goes back to the initial value.
                   onChange={(e) => props.setEditingFileName(e.target.value + '.xlsx')}
                   value={props.editingFileName.substring(0, props.editingFileName.lastIndexOf('.xlsx'))}
@@ -85,7 +100,11 @@ function NavBar(props) {
               </form>
             </Typography>
           ) : (
-            <CircularProgress style={{'color': 'white'}}/>
+            props.isNewProfile ? (
+              <Typography><i>Please add the new profile down below</i></Typography>
+            ): (
+              <CircularProgress style={{'color': 'white'}}/>
+            )
           )}
           {props.isImporting?
               <CircularProgress style={{'color': 'white'}}/>

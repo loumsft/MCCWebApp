@@ -213,7 +213,7 @@ export default function ControlSummary(props) {
   };
 
   return (
-    <Box sx={{ width: "80%", margin: "5em auto 0 auto" }}>
+    <Box sx={{ width: "80%", margin: "1em auto 0 auto"}}>
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
           <Step key={label}>
@@ -224,13 +224,14 @@ export default function ControlSummary(props) {
         ))}
       </Stepper>
       {isLoadingControl || isParamLoading ? (
-        <CircularProgress />
+        <>
+          <br/>
+          <CircularProgress sx={{margin: "auto"}} />  
+          <br/>
+          <br/>
+        </>
       ) : (
         <>
-          {/* {activeStep === 0 && renderComponent(activeStep)} Warning, renderCompoennt(activeStep) DOES NOT WORK as it will cause default values from one textfield to transfer over the other, a bug that should be reported to Material UI? */}
-          {/* {activeStep === 1 && renderComponent(activeStep)} */}
-          {/* {activeStep === 2 && renderComponent(activeStep)} */}
-
           {renderComponent(activeStep)}
 
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -251,9 +252,13 @@ export default function ControlSummary(props) {
             <Button variant='contained' onClick={handleSave} sx={{ mr: 1 }}>
               Save
             </Button>
+            
           </Box>
         </>
       )}
+      <Button variant='contained' onClick={props.handleNext} sx={{ mr: 1 }}>
+        Skip config
+      </Button>
     </Box>
   );
 }
