@@ -259,6 +259,7 @@ export default function MCC(props) {
         handleDrawerToggle={handleDrawerToggle}
       />
 
+      {/* TODO: Make a component for this Drawer section. */}
       <Drawer
         container={container}
         variant="temporary"
@@ -274,7 +275,7 @@ export default function MCC(props) {
       >
         <Toolbar/>
         <Divider/>
-        <Stepper activeStep={activeStep} orientation="vertical">
+        <Stepper activeStep={activeStep} orientation="vertical" sx={{pl: "1em"}}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
               <StepButton color="inherit" onClick={handleStep(index)} sx={{
