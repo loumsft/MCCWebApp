@@ -5,12 +5,16 @@ import xlwings as xw
 import os
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../build", static_url_path="/")
 
 CORS(app)
 
 # Project Root file directory.
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@app.route('/')
+def index():#tells flask to serve the index.html static file when flask is running.
+    return app.send_static_file('index.html')
 
 # MCC API Route
 @app.route("/mcc/<filename>", methods=['POST'], strict_slashes=False)
@@ -656,4 +660,4 @@ def importSizingModel():#create new session from imported input table, config ta
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_debugger=False)
