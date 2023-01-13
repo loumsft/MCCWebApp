@@ -1,16 +1,57 @@
 import pythoncom
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify, json
 from flask_cors import CORS
 import xlwings as xw
 import os
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
+							   unset_jwt_cookies, jwt_required, JWTManager
 
 app = Flask(__name__, static_folder="../build", static_url_path="/")
+
+app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=35)
+jwt = JWTManager(app)
 
 CORS(app)
 
 # Project Root file directory.
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        print(get_jwt())
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
+
+@app.route('/token', methods=["POST"])
+def create_token():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email != "adminperf" or password != "sobek": #ideally we compare the extracted login details with the data in database.
+        return {"msg": "Wrong email or password"}, 401
+
+    access_token = create_access_token(identity=email)
+    response = {"access_token":access_token}
+    return response
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
 
 @app.route('/')
 def index():#tells flask to serve the index.html static file when flask is running.
@@ -32,8 +73,8 @@ def mcc(filename):
 
 # Allows you to download Excel sheet, returns an Excel sheet
 
-
 @app.route("/download/<filename>", methods=['GET'], strict_slashes=False)
+
 def download(filename):
     return send_from_directory(ROOT_DIR, filename)
 
@@ -261,11 +302,11 @@ def updateControlSummarySheet(filename, data):
     return response
 
 @app.route("/control/<filename>", methods=['GET', 'POST'], strict_slashes=False)
+
 def ControlSummarySheet(filename):
     pythoncom.CoInitialize()
     response = []
     # TODO: USE sheet['variableName'].expand().value for table in future iterations
-    
     if request.method == 'GET':
         response = getControlSummarySheet(filename)
     elif request.method == 'POST':
@@ -278,7 +319,6 @@ def getControlSummarySheet(filename):
     with xw.App(visible=False) as app:
         book = app.books.open(filename)
         sheet = book.sheets['Control & Summary']
-        
         parameterTable = sheet['F21'].expand()
         startingColumn = parameterTable.column + 1
         startingRow = parameterTable.row
@@ -609,6 +649,7 @@ def getControlSummarySheet(filename):
 
 # Create new Excel file based on username, description, ticket and the universal sizing model we have.
 @app.route("/createbook", methods=["GET"], strict_slashes=False)
+@jwt_required()
 def createBook():
     pythoncom.CoInitialize()
     with xw.App(visible=False) as app:
@@ -619,7 +660,6 @@ def createBook():
         book.close()
     pythoncom.CoUninitialize()
     return newTitle
-
 
 @app.route("/renamebook", methods=["POST"], strict_slashes=False)
 def renameBook():

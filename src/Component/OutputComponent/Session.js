@@ -37,7 +37,10 @@ export default function Session(props) {
     axios({
       //asynchronously happens
       method: "get",
-      url: "/createbook"
+      url: "/createbook",
+      headers: {
+        Authorization: 'Bearer ' + props.token
+      }
     }).then((response) => {
       props.setCurrentFileName(response.data);
       props.setEditingFileName(response.data);

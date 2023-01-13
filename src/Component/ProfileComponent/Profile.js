@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -53,7 +53,11 @@ function Profile(props) {
     if (!props.currentFileName && props.currentFileName.length === 0) {
       //make new file if no current file name
       props.setProfileLoading(true);
-      axios.get("/createbook")
+      axios.get("/createbook",{
+        headers: {
+          Authorization: 'Bearer ' + props.token
+        }
+      })
         .then((response) => {
           props.setCurrentFileName(response.data);
           props.setEditingFileName(response.data);

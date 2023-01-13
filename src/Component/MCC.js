@@ -92,6 +92,10 @@ export default function MCC(props) {
         numSites: inputTable.numSites,
         numCplane: inputTable.numCplane,
         numUplane: inputTable.numUplane,
+      },{
+        headers: {
+          Authorization: 'Bearer ' + props.token
+        }
       }).then((response) => {
         setoutputData(response.data);
         setisOutputLoading(false);
@@ -186,6 +190,7 @@ export default function MCC(props) {
             setoutputData={setoutputData}
             setIsNewProfile={setIsNewProfile}
             handleNext={handleNext}
+            token={props.token}
           />
         )
       case 1:
@@ -237,6 +242,7 @@ export default function MCC(props) {
               ticket={ticket}
               setTicket={setTicket}
               setActiveStep={setActiveStep}
+              token={props.token}
             />
           )
           
