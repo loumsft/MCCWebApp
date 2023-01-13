@@ -215,6 +215,7 @@ export default function MCC(props) {
             currentFileName={currentFileName}
             handleSubmit={handleSubmit}
             handleNext={handleNext}
+            token={props.token}
           />
           
         )
@@ -263,6 +264,7 @@ export default function MCC(props) {
         isNewProfile={isNewProfile}
         setActiveStep={setActiveStep}
         handleDrawerToggle={handleDrawerToggle}
+        token={props.token}
       />
 
       {/* TODO: Make a component for this Drawer section. */}

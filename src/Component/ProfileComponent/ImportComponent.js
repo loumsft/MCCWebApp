@@ -35,19 +35,22 @@ function SimpleDialog(props) {
           props.setoutputData({})
           props.handleNext()
           axios.post("/import", { 
-                fileName: file.name,
-                inputTable: inputTable,
-                configTable: configTable
-              }
-            )
-            .then((response) => {
-              //set the input table from import response
-              props.setInputTable(response.data.inputTable);
-            })
-            .then((response) => {
-              props.setIsImporting(false);
-              handleClose()
-            });
+            fileName: file.name,
+            inputTable: inputTable,
+            configTable: configTable
+          },{
+            headers: {
+              Authorization: 'Bearer ' + props.token
+            }
+          })
+          .then((response) => {
+            //set the input table from import response
+            props.setInputTable(response.data.inputTable);
+          })
+          .then((response) => {
+            props.setIsImporting(false);
+            handleClose()
+          });
         }
       };
       reader.readAsArrayBuffer(file);

@@ -297,6 +297,9 @@ export default function Output(props) {
             axios("/download/" + props.currentFileName, {
               method: "GET",
               responseType: "blob", // important
+              headers: {
+                Authorization: 'Bearer ' + props.token
+              }
             }).then((response) => {
               //Creates an <a> tag hyperlink that links the excel sheet Blob object to a url for downloading.
               const url = window.URL.createObjectURL(new Blob([response.data]));

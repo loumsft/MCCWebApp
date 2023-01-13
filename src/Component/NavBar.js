@@ -46,6 +46,10 @@ function NavBar(props) {
     axios.post('/renamebook', {
       currentFileName: props.currentFileName,
       newFileName: props.editingFileName
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + props.token
+      }
     }).then((response) => {
       props.setCurrentFileName(props.editingFileName)
       //no need to set editing filename cuse the file name hsa been edited onchange of textfield.

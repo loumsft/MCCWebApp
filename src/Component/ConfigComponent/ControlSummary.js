@@ -54,6 +54,9 @@ export default function ControlSummary(props) {
     if (props.currentFileName && isLoadingControl) {
       axios("/control/" + props.currentFileName, {
         method: "get",
+        headers: {
+          Authorization: 'Bearer ' + props.token
+        }
       }).then((response) => {
         setserverData(response.data);
         setCurrServerData(response.data);
@@ -69,7 +72,11 @@ export default function ControlSummary(props) {
       didMount.current = true;
       return;
     }
-    axios.post("/control/" + props.currentFileName, currServerData).then(() => {
+    axios.post("/control/" + props.currentFileName, currServerData, {
+      headers: {
+        Authorization: 'Bearer ' + props.token
+      }
+    }).then(() => {
       setisLoadingControl(true); //triggers the useeffect above to reload the control n summary page
     });
   }, [param]);
@@ -84,6 +91,9 @@ export default function ControlSummary(props) {
       method: "post",
       url: "/control/" + props.currentFileName,
       data: currServerData,
+      headers: {
+        Authorization: 'Bearer ' + props.token
+      }
     }).then((response) => {
       props.handleSubmit(e);
       navigate("/mcc/io");

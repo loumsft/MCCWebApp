@@ -22,7 +22,6 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
-        print(get_jwt())
         now = datetime.now(timezone.utc)
         target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
         if target_timestamp > exp_timestamp:
@@ -59,6 +58,7 @@ def index():#tells flask to serve the index.html static file when flask is runni
 
 # MCC API Route
 @app.route("/mcc/<filename>", methods=['POST'], strict_slashes=False)
+@jwt_required()
 def mcc(filename):
     pythoncom.CoInitialize()  # IMPORTANT: apparently running app creates a thread and this falls uner a multithreading issue which needs to be looked into another time. This line fixes this issue
     # This line is required since we are using COM (windows 32 library) therefore CoInitialize has to be called in this thread instance. https://stackoverflow.com/questions/9286600/when-do-i-need-to-call-coinitialize-in-this-scenario
@@ -74,7 +74,7 @@ def mcc(filename):
 # Allows you to download Excel sheet, returns an Excel sheet
 
 @app.route("/download/<filename>", methods=['GET'], strict_slashes=False)
-
+@jwt_required()
 def download(filename):
     return send_from_directory(ROOT_DIR, filename)
 
@@ -302,7 +302,7 @@ def updateControlSummarySheet(filename, data):
     return response
 
 @app.route("/control/<filename>", methods=['GET', 'POST'], strict_slashes=False)
-
+@jwt_required()
 def ControlSummarySheet(filename):
     pythoncom.CoInitialize()
     response = []
@@ -662,6 +662,7 @@ def createBook():
     return newTitle
 
 @app.route("/renamebook", methods=["POST"], strict_slashes=False)
+@jwt_required()
 def renameBook():
     data = request.get_json()
     if os.path.isfile(data["newFileName"]):
@@ -673,11 +674,11 @@ def renameBook():
     return data["newFileName"]
 
 @app.route("/import", methods=["POST"], strict_slashes=False)
+@jwt_required()
 def importSizingModel():#create new session from imported input table, config table.
     data = request.get_json()
     #create new session with parameter filename
     filename = data['fileName']
-    print()
     pythoncom.CoInitialize()
     with xw.App(visible=False) as app:
         if (os.path.exists(filename)):
