@@ -34,7 +34,7 @@ function SimpleDialog(props) {
           props.setIsImporting(true)
           props.setoutputData({})
           props.handleNext()
-          axios.post("/import", { 
+          axios.post("/api/import", { 
             fileName: file.name,
             inputTable: inputTable,
             configTable: configTable

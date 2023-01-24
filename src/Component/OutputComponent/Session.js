@@ -37,7 +37,7 @@ export default function Session(props) {
     axios({
       //asynchronously happens
       method: "get",
-      url: "/createbook",
+      url: "api/createbook",
       headers: {
         Authorization: 'Bearer ' + props.token
       }

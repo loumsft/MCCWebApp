@@ -17,8 +17,7 @@ function App() {
         :(
           <>
             <Routes>
-              <Route exact path='/' element={<Navigate to='/mcc' replace />} />
-              <Route path='/mcc/*' element={<MCC token={token}/>} />
+              <Route exact path='/' element={<MCC token={token}/>} />
               <Route path='/404' element={<Error />} />
               <Route path='*' element={<Navigate replace to='/404' />} />
             </Routes>

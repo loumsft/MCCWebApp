@@ -9,8 +9,8 @@ import Toolbar from '@mui/material/Toolbar';
 function DrawerProgressComponent(props) {
   const steps = ['User Profile', 'Input Table', 'Control & Summary', 'Output Table']
   const drawerWidth = 240;
-  const container = window !== undefined ? () => window().document.body : undefined;
   const { window } = props;
+  const container = window !== undefined ? () => window().document.body : undefined;
 
   const handleStep = (step) => () => {
     props.setActiveStep(step);

@@ -10,7 +10,7 @@ from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
 app = Flask(__name__, static_folder="../build", static_url_path="/")
 
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=35)
+# app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=35)
 jwt = JWTManager(app)
 
 CORS(app)
@@ -35,7 +35,7 @@ def refresh_expiring_jwts(response):
         # Case where there is not a valid JWT. Just return the original respone
         return response
 
-@app.route('/token', methods=["POST"])
+@app.route('/api/token', methods=["POST"])
 def create_token():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
@@ -45,18 +45,18 @@ def create_token():
     response = {"access_token":access_token}
     return response
 
-@app.route("/logout", methods=["POST"])
+@app.route("/api/logout", methods=["POST"])
 def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
 
-@app.route('/')
+@app.route('/api')
 def index():#tells flask to serve the index.html static file when flask is running.
     return app.send_static_file('index.html')
 
 # MCC API Route
-@app.route("/mcc/<filename>", methods=['POST'], strict_slashes=False)
+@app.route("/api/mcc/<filename>", methods=['POST'], strict_slashes=False)
 @jwt_required()
 def mcc(filename):
     pythoncom.CoInitialize()  # IMPORTANT: apparently running app creates a thread and this falls uner a multithreading issue which needs to be looked into another time. This line fixes this issue
@@ -72,7 +72,7 @@ def mcc(filename):
 
 # Allows you to download Excel sheet, returns an Excel sheet
 
-@app.route("/download/<filename>", methods=['GET'], strict_slashes=False)
+@app.route("/api/download/<filename>", methods=['GET'], strict_slashes=False)
 @jwt_required()
 def download(filename):
     return send_from_directory(ROOT_DIR, filename)
@@ -131,6 +131,7 @@ def updateInputTable(filename, totalNumSessions, totalTraffic, numSites, numCpla
             numUplane[0], numUplane[1], numUplane[2], numUplane[3], numUplane[4]]
         book.save()
         book.close()
+    pass
 
 def getOutputTable(filename):
     with xw.App(visible=False) as app:
@@ -198,7 +199,6 @@ def getOutputTable(filename):
         numCPMvCPUTotalCCUP = sheet.range('J57:N57').value
         numISMvCPUTotalCCUP = sheet.range('J58:N58').value
         numMSMvCPUTotalCCUP = sheet.range('J59:N59').value
-        book.save()
         book.close()
     return {
         'totalNumSessionsIC': totalNumSessionsIC,
@@ -248,59 +248,7 @@ def getOutputTable(filename):
         'numMSMvCPUTotalCCUP': numMSMvCPUTotalCCUP,
     }
 
-def updateControlSummarySheet(filename, data):
-    with xw.App(visible=False) as app:
-        book = app.books.open(filename)
-        sheet = book.sheets['Control & Summary']
-        # returns a range object consisting address of parameter table.
-        parameterTable = sheet['F21'].expand()
-        
-        # grab the next available column in parameter table and send to frontend
-        startingColumn = parameterTable.column + 1
-        startingRow = parameterTable.row
-        # Master Control settings
-        sheet.range('C4').value = data["masterControl"][0]["data"]
-        sheet.range(
-            'SSM_ISM__Number_of_vCPU_s').value = data["masterControl"][1]["data"]
-        sheet.range(
-            'CPM_DCM_CCM__Number_of_vCPU_s').value = data["masterControl"][2]["data"]
-        sheet.range(
-            'MCM__Number_of_vCPU_s').value = data["masterControl"][3]["data"]
-        sheet.range(
-            'SSM_ISM__Memory__GB').value = data["masterControl"][4]["data"]
-        sheet.range('CPM__Memory__GB').value = data["masterControl"][5]["data"]
-        sheet.range('MCM__Memory__GB').value = data["masterControl"][6]["data"]
-        sheet.range(
-            'Max_session_per_ISM').value = data["masterControl"][7]["data"]
-        sheet.range(
-            'Max_session_per_CPM').value = data["masterControl"][8]["data"]
-        sheet.range(
-            'Control_Plane_CPU_engineering_limit').value = data["masterControl"][9]["data"]
-        sheet.range(
-            'User_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
-        sheet.range(
-            'Control_Plane_Memory_engineering_limit').value = data["masterControl"][11]["data"]
-        sheet.range(
-            'User_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
-        sheet.range(
-            'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][13]["data"]
-        sheet.range(
-            'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][14]["data"]
-        
-        # UP Cluster Related Parameters
-        sheet.range(
-            'User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
-        response = "Data post to control & summary successful"
-                
-        #editable parameters begin on the 5th index in data["defaultCustomizedParams][i]["data"]
-        for row in range(len(data["defaultCustomizedParams"])):
-            for col in range(4, len(data["defaultCustomizedParams"][row]["data"])):
-                sheet.range((startingRow + row, startingColumn + col)).value = data["defaultCustomizedParams"][row]["data"][col]
-        book.save()
-        book.close()
-    return response
-
-@app.route("/control/<filename>", methods=['GET', 'POST'], strict_slashes=False)
+@app.route("/api/control/<filename>", methods=['GET', 'POST'], strict_slashes=False)
 @jwt_required()
 def ControlSummarySheet(filename):
     pythoncom.CoInitialize()
@@ -646,13 +594,65 @@ def getControlSummarySheet(filename):
         book.close()
     return response
 
+def updateControlSummarySheet(filename, data):
+    with xw.App(visible=False) as app:
+        book = app.books.open(filename)
+        sheet = book.sheets['Control & Summary']
+        # returns a range object consisting address of parameter table.
+        parameterTable = sheet['F21'].expand()
+        
+        # grab the next available column in parameter table and send to frontend
+        startingColumn = parameterTable.column + 1
+        startingRow = parameterTable.row
+        # Master Control settings
+        sheet.range('C4').value = data["masterControl"][0]["data"]
+        sheet.range(
+            'SSM_ISM__Number_of_vCPU_s').value = data["masterControl"][1]["data"]
+        sheet.range(
+            'CPM_DCM_CCM__Number_of_vCPU_s').value = data["masterControl"][2]["data"]
+        sheet.range(
+            'MCM__Number_of_vCPU_s').value = data["masterControl"][3]["data"]
+        sheet.range(
+            'SSM_ISM__Memory__GB').value = data["masterControl"][4]["data"]
+        sheet.range('CPM__Memory__GB').value = data["masterControl"][5]["data"]
+        sheet.range('MCM__Memory__GB').value = data["masterControl"][6]["data"]
+        sheet.range(
+            'Max_session_per_ISM').value = data["masterControl"][7]["data"]
+        sheet.range(
+            'Max_session_per_CPM').value = data["masterControl"][8]["data"]
+        sheet.range(
+            'Control_Plane_CPU_engineering_limit').value = data["masterControl"][9]["data"]
+        sheet.range(
+            'User_Plane_CPU_engineering_limit').value = data["masterControl"][10]["data"]
+        sheet.range(
+            'Control_Plane_Memory_engineering_limit').value = data["masterControl"][11]["data"]
+        sheet.range(
+            'User_Plane_Memory_engineering_limit').value = data["masterControl"][12]["data"]
+        sheet.range(
+            'Max_number_of_CPMs_in_a_cluster').value = data["masterControl"][13]["data"]
+        sheet.range(
+            'Max_number_of_ISMs_in_a_cluster').value = data["masterControl"][14]["data"]
+        
+        # UP Cluster Related Parameters
+        sheet.range(
+            'User_Plane_Cluster_Related_Parameters').value = data["UPClusterRelatedParams"][0]["data"]
+        response = "Data post to control & summary successful"
+                
+        #editable parameters begin on the 5th index in data["defaultCustomizedParams][i]["data"]
+        for row in range(len(data["defaultCustomizedParams"])):
+            for col in range(4, len(data["defaultCustomizedParams"][row]["data"])):
+                sheet.range((startingRow + row, startingColumn + col)).value = data["defaultCustomizedParams"][row]["data"][col]
+        book.save()
+        book.close()
+    return response
+
 # Create new Excel file based on username, description, ticket and the universal sizing model we have.
-@app.route("/createbook", methods=["GET"], strict_slashes=False)
+@app.route("/api/createbook", methods=["GET"], strict_slashes=False)
 @jwt_required()
 def createBook():
     pythoncom.CoInitialize()
     with xw.App(visible=False) as app:
-        book = app.books.open("MCC Sizing Model v1.4.xlsx")
+        book = app.books.open("MCC Sizing Model v1.5.xlsx")
         now = datetime.now()
         newTitle = now.strftime("%Y_%m_%d_%H_%M_%S") + '.xlsx'
         book.save(newTitle)
@@ -660,7 +660,7 @@ def createBook():
     pythoncom.CoUninitialize()
     return newTitle
 
-@app.route("/renamebook", methods=["POST"], strict_slashes=False)
+@app.route("/api/renamebook", methods=["POST"], strict_slashes=False)
 @jwt_required()
 def renameBook():
     data = request.get_json()
@@ -672,7 +672,7 @@ def renameBook():
         os.rename(data["currentFileName"], data["newFileName"])
     return data["newFileName"]
 
-@app.route("/import", methods=["POST"], strict_slashes=False)
+@app.route("/api/import", methods=["POST"], strict_slashes=False)
 @jwt_required()
 def importSizingModel():#create new session from imported input table, config table.
     data = request.get_json()
@@ -683,7 +683,7 @@ def importSizingModel():#create new session from imported input table, config ta
         if (os.path.exists(filename)):
             print('filename exists, opening the saved session.')
         else:
-            book = app.books.open("MCC Sizing Model v1.4.xlsx")
+            book = app.books.open("MCC Sizing Model v1.5.xlsx")
             book.save(filename)
             book.close()
     

@@ -294,7 +294,7 @@ export default function Output(props) {
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
         <Button
           onClick={() => {
-            axios("/download/" + props.currentFileName, {
+            axios("/api/download/" + props.currentFileName, {
               method: "GET",
               responseType: "blob", // important
               headers: {

@@ -43,7 +43,7 @@ function NavBar(props) {
   const handleFileNameSubmit = (e) => {
     e.preventDefault()
     //need to rename the actual file
-    axios.post('/renamebook', {
+    axios.post('/api/renamebook', {
       currentFileName: props.currentFileName,
       newFileName: props.editingFileName
     }, {

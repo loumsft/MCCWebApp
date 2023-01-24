@@ -9,7 +9,6 @@ import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { useNavigate } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,7 +21,6 @@ export default function ControlSummary(props) {
   const [activeStep, setActiveStep] = useState(0);
 
   const [currServerData, setCurrServerData] = useState({}); //new server data based on changes made to the user REGARDLESS of whether they saved or cancel their edits.
-  const navigate = useNavigate();
   const steps = [
     "Master Control (Settings for All Years)",
     "User Plane Cluster Related Parameters",
@@ -52,7 +50,7 @@ export default function ControlSummary(props) {
   useEffect(() => {
     //Load the control and summary page
     if (props.currentFileName && isLoadingControl) {
-      axios("/control/" + props.currentFileName, {
+      axios("/api/control/" + props.currentFileName, {
         method: "get",
         headers: {
           Authorization: 'Bearer ' + props.token
@@ -72,7 +70,7 @@ export default function ControlSummary(props) {
       didMount.current = true;
       return;
     }
-    axios.post("/control/" + props.currentFileName, currServerData, {
+    axios.post("/api/control/" + props.currentFileName, currServerData, {
       headers: {
         Authorization: 'Bearer ' + props.token
       }
@@ -89,14 +87,13 @@ export default function ControlSummary(props) {
   const handleSave = (e) => {
     axios({
       method: "post",
-      url: "/control/" + props.currentFileName,
+      url: "api/control/" + props.currentFileName,
       data: currServerData,
       headers: {
         Authorization: 'Bearer ' + props.token
       }
     }).then((response) => {
       props.handleSubmit(e);
-      navigate("/mcc/io");
     });
   };
 

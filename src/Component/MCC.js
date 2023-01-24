@@ -70,7 +70,7 @@ export default function MCC(props) {
     }
     if (isOutputLoading) {
       //ensures that we only fetch when condition of outputloading
-      axios.post("/mcc/" + currentFileName, {
+      axios.post("/api/mcc/" + currentFileName, {
         totalNumSessions: inputTable.totalNumSessions,
         totalTraffic: inputTable.totalTraffic,
         numSites: inputTable.numSites,

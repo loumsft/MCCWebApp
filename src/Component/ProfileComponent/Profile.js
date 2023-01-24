@@ -49,7 +49,7 @@ function Profile(props) {
     if (!props.currentFileName && props.currentFileName.length === 0) {
       //make new file if no current file name
       props.setProfileLoading(true);
-      axios.get("/createbook",{
+      axios.get("/api/createbook",{
         headers: {
           Authorization: 'Bearer ' + props.token
         }
@@ -74,7 +74,7 @@ function Profile(props) {
         color: "white",
       }}
     >
-      <h2>MCC Sizing Model Version 1.4</h2>
+      <h2>MCC Sizing Model Version 1.5</h2>
       <p style={{ marginLeft: "8vw", marginRight: "8vw" }}>
         This is the MCC Sizing Model which covers both Integrated and CUPS
         Architecture. Please make sure to fill in all the required fields in
