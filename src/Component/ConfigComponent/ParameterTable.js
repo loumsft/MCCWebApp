@@ -45,14 +45,12 @@ function ParameterTable(props) {
     setDisableAdd(true)
   }
 
-
-  
   const onChange = (e, rowIndex, columnIndex) => {
-    const newRowData = props.paramsData
-    newRowData[rowIndex]['data'][columnIndex] = e.target.value
+    const newArray = props.paramsData
+    newArray[rowIndex]['data'][columnIndex] = e.target.value
     props.setCurrServerData((prevServerData) => ({
       ...prevServerData,
-      defaultCustomizedParams: newRowData
+      defaultCustomizedParams: newArray
     }))
   }
 
@@ -126,14 +124,6 @@ function ParameterTable(props) {
                                     
                                   />
                                 )}
-                                {/* <ValidationTextField
-                                    onChange={(e) => onChange(e, rowIndex, colIndex)}
-                                    // variant="outlined"
-                                    autoFocus={row.title === "Total number of sessions"}
-                                    value={element || ""}
-                                    // fullWidth
-                                    
-                                  /> */}
                               </TableCell>
                             ):(
                               <TableCell align='center' >

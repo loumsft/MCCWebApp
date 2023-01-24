@@ -41,7 +41,6 @@ def create_token():
     password = request.json.get("password", None)
     if email != "adminperf" or password != "sobek": #ideally we compare the extracted login details with the data in database.
         return {"msg": "Wrong email or password"}, 401
-
     access_token = create_access_token(identity=email)
     response = {"access_token":access_token}
     return response

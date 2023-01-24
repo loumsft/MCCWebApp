@@ -120,7 +120,7 @@ export default function ControlSummary(props) {
         }));
         break;
       }
-      //TODO: MAKE EDIT CASE FOR CUSTOM PARAMETER TABLE
+      //the parameter table has its own onChange function in ParameterTable Component
       default:
         console.error("invalid active step", activeStep);
     }

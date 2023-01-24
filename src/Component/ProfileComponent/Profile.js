@@ -34,10 +34,6 @@ function Profile(props) {
     fontWeight: "bold",
   });
 
-  const handleCancel = (e) => {//TODO: Do handle cancel case
-    e.preventDefault();
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     props.handleNext()
@@ -148,16 +144,6 @@ function Profile(props) {
         </TableContainer>
 
         <ImportComponent {...props}/>
-
-        {/* {props.currentFileName && props.currentFileName.length !== 0 && (
-          <Button
-            onClick={(e) => handleCancel(e)}
-            color='primary'
-            variant='contained'
-          >
-            Cancel
-          </Button>
-        )} */}
         
         <Button
           disabled={props.profileLoading}
