@@ -85,10 +85,7 @@ export default function ControlSummary(props) {
   
 
   const handleSave = (e) => {
-    axios({
-      method: "post",
-      url: "api/control/" + props.currentFileName,
-      data: currServerData,
+    axios.post("/api/control/" + props.currentFileName, currServerData, {
       headers: {
         Authorization: 'Bearer ' + props.token
       }
@@ -263,9 +260,9 @@ export default function ControlSummary(props) {
           </Box>
         </>
       )}
-      <Button variant='contained' onClick={props.handleNext} sx={{ mr: 1 }}>
+      {/* <Button variant='contained' onClick={props.handleNext} sx={{ mr: 1 }}>
         Skip config
-      </Button>
+      </Button> */}
     </Box>
   );
 }
