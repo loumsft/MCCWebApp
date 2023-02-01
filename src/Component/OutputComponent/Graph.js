@@ -1,5 +1,5 @@
-import React from "react";
-import { ResponsiveLine } from "@nivo/line";
+import React, { useState } from "react";
+import ReactApexChart from "react-apexcharts";
 
 export default function Graph(props) {
   const data = [
@@ -135,71 +135,58 @@ export default function Graph(props) {
     },
   ];
 
+  const [options, setOptions] = useState({
+    chart: {
+      height: 350,
+      type: "line",
+    },
+    stroke: {
+      width: [0, 4],
+    },
+    dataLabels: {
+      enabled: true,
+      enabledOnSeries: [1],
+    },
+    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+    // xaxis: {
+    //   type: 'datetime'
+    // },
+    yaxis: [
+      {
+        title: {
+          text: "Total Number of Sessions",
+        },
+      },
+      {
+        opposite: true,
+        title: {
+          text: "Total Traffic (Gbps)",
+        },
+      },
+    ],
+  });
+
+  const [series, setSeries] = useState([
+    {
+      name: "Total Number of Sessions",
+      type: "column",
+      data: props.totalNumSessions.data,
+    },
+    {
+      name: "Total Traffic (Gbps)",
+      type: "line",
+      data: props.totalTraffic.data,
+    },
+  ]);
+
   return (
-    <ResponsiveLine
-      data={data}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-      xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: false,
-        reverse: false,
-      }}
-      yFormat=' >-.2f'
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        orient: "bottom",
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        // legend: 'transportation',
-        legendOffset: 36,
-        legendPosition: "middle",
-      }}
-      axisLeft={{
-        orient: "left",
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "unit",
-        legendOffset: -40,
-        legendPosition: "middle",
-      }}
-      pointSize={10}
-      pointColor={{ theme: "background" }}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabelYOffset={-12}
-      useMesh={true}
-      // legends={[
-      //     {
-      //         anchor: 'bottom-right',
-      //         direction: 'column',
-      //         justify: false,
-      //         translateX: 100,
-      //         translateY: 0,
-      //         itemsSpacing: 0,
-      //         itemDirection: 'left-to-right',
-      //         itemWidth: 80,
-      //         itemHeight: 20,
-      //         itemOpacity: 0.75,
-      //         symbolSize: 12,
-      //         symbolShape: 'circle',
-      //         symbolBorderColor: 'rgba(0, 0, 0, .5)',
-      //         effects: [
-      //             {
-      //                 on: 'hover',
-      //                 style: {
-      //                     itemBackground: 'rgba(0, 0, 0, .03)',
-      //                     itemOpacity: 1
-      //                 }
-      //             }
-      //         ]
-      //     }
-      // ]}
-    />
+    <>
+      <ReactApexChart
+        options={options}
+        series={series}
+        type='line'
+        height={350}
+      />
+    </>
   );
 }

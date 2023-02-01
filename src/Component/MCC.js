@@ -9,6 +9,7 @@ import Output from './OutputComponent/Output';
 import DrawerProgressComponent from './NavBarComponent/DrawerProgressComponent';
 
 export default function MCC(props) {
+
   const [username, setUsername] = useState("");
   const [description, setDescription] = useState("");
   const [ticket, setTicket] = useState();
@@ -18,22 +19,22 @@ export default function MCC(props) {
   const [isImporting, setIsImporting] = useState(false)
 
   //DEMO PURPOSES
-  // const initialInputValues = {
-  //   totalNumSessions: ["11000000","13000000","10000000","17000000","19000000",],
-  //   totalTraffic: ["74", "84", "94", "84", "100"],
-  //   numSites: ["2", "2", "2", "2", "2"],
-  //   numCplane: ["2", "2", "2", "2", "2"],
-  //   numUplane: ["2", "2", "2", "2", "2"],
-  // }
+  const initialInputValues = {
+    totalNumSessions: ["11000000","13000000","10000000","17000000","19000000",],
+    totalTraffic: ["74", "140", "200", "400", "800"],
+    numSites: ["2", "2", "2", "2", "2"],
+    numCplane: ["2", "2", "2", "2", "2"],
+    numUplane: ["2", "2", "2", "2", "2"],
+  }
 
   //Input Table & Output Table related data
-  const initialInputValues = {
-    totalNumSessions: ["","","","",""],
-    totalTraffic: ["","","","",""],
-    numSites: ["","","","",""],
-    numCplane: ["","","","",""],
-    numUplane: ["","","","",""],
-  }
+  // const initialInputValues = {
+  //   totalNumSessions: ["","","","",""],
+  //   totalTraffic: ["","","","",""],
+  //   numSites: ["","","","",""],
+  //   numCplane: ["","","","",""],
+  //   numUplane: ["","","","",""],
+  // }
   const [inputTable, setInputTable] = useState(initialInputValues)
   const [isNewProfile, setIsNewProfile] = React.useState(true)
   const [outputData, setoutputData] = useState({});
@@ -42,12 +43,8 @@ export default function MCC(props) {
 
   const didMount = useRef(false);
 
-  const [mobileOpen, setMobileOpen] = React.useState(false);
 
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -85,11 +82,12 @@ export default function MCC(props) {
         setisOutputLoading(false);
       });
     }
+
+    
   }, [isOutputLoading]);
 
   useEffect(() => {//testing inputtable
     // console.log(inputTable)
-
   }, [inputTable])
   
   useEffect(() => {//testing filename
@@ -112,11 +110,20 @@ export default function MCC(props) {
     setActiveStep(newActiveStep);
   };
 
-  const renderComponent = (activeStep) => {
+  // const getMenuProps = () => { //TODO: set props here.
+  //   return {
+  //     username,
+  //     setUsername,
+  //     description,
+  //     ticket
+  //   }
+  // }
+
+  const renderComponent = (activeStep) => { //TODO: Change name
     switch (activeStep) {
       case 0:
         return (
-          <Profile
+          <Profile 
             username={username}
             setUsername={setUsername}
             description={description}
@@ -206,15 +213,12 @@ export default function MCC(props) {
         isImporting={isImporting}
         isNewProfile={isNewProfile}
         setActiveStep={setActiveStep}
-        handleDrawerToggle={handleDrawerToggle}
         token={props.token}
       />
 
       <DrawerProgressComponent 
         setActiveStep={setActiveStep}
         activeStep={activeStep} 
-        mobileOpen={mobileOpen}
-        handleDrawerToggle={handleDrawerToggle}
       />
 
       {renderComponent(activeStep)}

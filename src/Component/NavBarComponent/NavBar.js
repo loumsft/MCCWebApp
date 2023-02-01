@@ -31,14 +31,11 @@ function HideOnScroll(props) {
 
 
 function NavBar(props) {
+  const drawerWidth = 180;
+
   const onClickProfileHandler = () => {
     props.setActiveStep(0)
   };
-
-  React.useEffect(() => {
-    // console.log(props.isImporting)
-    
-  }, [props.isImporting])
 
   const handleFileNameSubmit = (e) => {
     e.preventDefault()
@@ -58,22 +55,11 @@ function NavBar(props) {
   
   return (
     <HideOnScroll {...props}>
-      <AppBar>
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <div style={{display: 'flex'}}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={props.handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography align='center' variant='h6' component='div'>
-              MCC WebApp
-            </Typography>
-          </div>
+      <AppBar
+        position="fixed"
+        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+      >
+        <Toolbar sx={{ justifyContent: "center" }}>
           {props.currentFileName ? (
             <Typography sx={{width: '18em'}} variant='h7' component='div'>
               <form
@@ -114,26 +100,6 @@ function NavBar(props) {
               <CircularProgress style={{'color': 'white'}}/>
             :
             <div>
-              <Link to='/mcc/io'>
-                <Button variant='outlined' sx={{ color: "white" }}>
-                  I/O
-                </Button>
-              </Link>
-              <Button
-                variant='outlined'
-                onClick={onClickProfileHandler}
-                sx={{ color: "white" }}
-              >
-                <AccountCircleIcon />
-              </Button>
-              
-                <Link to='/mcc/control' >
-                  <Button variant='outlined' sx={{ color: "white" }} >
-                      <SettingsIcon />
-                  </Button>
-                </Link>
-              
-              
             </div>
           }
         </Toolbar>
