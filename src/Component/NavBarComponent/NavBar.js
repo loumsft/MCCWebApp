@@ -7,14 +7,8 @@ import {
   Slide,
 } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import Button from "@mui/material/Button";
-import SettingsIcon from "@mui/icons-material/Settings";
-import { Link } from "react-router-dom";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TextField from "@mui/material/TextField";
 import axios from 'axios'
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -33,9 +27,9 @@ function HideOnScroll(props) {
 function NavBar(props) {
   const drawerWidth = 180;
 
-  const onClickProfileHandler = () => {
-    props.setActiveStep(0)
-  };
+  // const onClickProfileHandler = () => {
+  //   props.setActiveStep(0)
+  // };
 
   const handleFileNameSubmit = (e) => {
     e.preventDefault()

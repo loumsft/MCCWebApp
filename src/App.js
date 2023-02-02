@@ -1,6 +1,6 @@
 import "./App.css";
 import MCC from "./Component/MCC";
-import React, {useEffect} from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Error from "./Component/Error";
 import useToken from './Component/LoginComponent/useToken';
