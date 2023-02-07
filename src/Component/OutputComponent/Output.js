@@ -214,12 +214,7 @@ export default function Output(props) {
     ],
   ];
 
-
   const [tableTab, setTableTab] = useState(0); //tab index of the output table tab
-  
-  React.useEffect(() => {
-    console.log(outputData)
-  }, [outputData])
   
   return ( 
     <>
