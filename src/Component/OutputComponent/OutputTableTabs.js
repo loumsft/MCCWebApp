@@ -98,11 +98,11 @@ export default function OutputTableTabs(props) {
                   <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
-                  <TableCell>{row.data[0]}</TableCell>
-                  <TableCell>{row.data[1]}</TableCell>
-                  <TableCell>{row.data[2]}</TableCell>
-                  <TableCell>{row.data[3]}</TableCell>
-                  <TableCell>{row.data[4]}</TableCell>
+                  <TableCell>{row.data[0] && row.data[0].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[1] && row.data[1].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[2] && row.data[2].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[3] && row.data[3].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[4] && row.data[4].toLocaleString()}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -135,11 +135,11 @@ export default function OutputTableTabs(props) {
                   <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
-                  <TableCell>{row.data[0]}</TableCell>
-                  <TableCell>{row.data[1]}</TableCell>
-                  <TableCell>{row.data[2]}</TableCell>
-                  <TableCell>{row.data[3]}</TableCell>
-                  <TableCell>{row.data[4]}</TableCell>
+                  <TableCell>{row.data[0] && row.data[0].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[1] && row.data[1].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[2] && row.data[2].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[3] && row.data[3].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[4] && row.data[4].toLocaleString()}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -173,11 +173,11 @@ export default function OutputTableTabs(props) {
                   <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
-                  <TableCell>{row.data[0]}</TableCell>
-                  <TableCell>{row.data[1]}</TableCell>
-                  <TableCell>{row.data[2]}</TableCell>
-                  <TableCell>{row.data[3]}</TableCell>
-                  <TableCell>{row.data[4]}</TableCell>
+                  <TableCell>{row.data[0] && row.data[0].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[1] && row.data[1].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[2] && row.data[2].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[3] && row.data[3].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[4] && row.data[4].toLocaleString()}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -211,11 +211,11 @@ export default function OutputTableTabs(props) {
                   <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
-                  <TableCell>{row.data[0]}</TableCell>
-                  <TableCell>{row.data[1]}</TableCell>
-                  <TableCell>{row.data[2]}</TableCell>
-                  <TableCell>{row.data[3]}</TableCell>
-                  <TableCell>{row.data[4]}</TableCell>
+                  <TableCell>{row.data[0] && row.data[0].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[1] && row.data[1].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[2] && row.data[2].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[3] && row.data[3].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[4] && row.data[4].toLocaleString()}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -248,11 +248,11 @@ export default function OutputTableTabs(props) {
                   <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
-                  <TableCell>{row.data[0]}</TableCell>
-                  <TableCell>{row.data[1]}</TableCell>
-                  <TableCell>{row.data[2]}</TableCell>
-                  <TableCell>{row.data[3]}</TableCell>
-                  <TableCell>{row.data[4]}</TableCell>
+                  <TableCell>{row.data[0] && row.data[0].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[1] && row.data[1].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[2] && row.data[2].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[3] && row.data[3].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[4] && row.data[4].toLocaleString()}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -285,11 +285,11 @@ export default function OutputTableTabs(props) {
                   <TableCell component='th' scope='row'>
                     {row.name}
                   </TableCell>
-                  <TableCell>{row.data[0]}</TableCell>
-                  <TableCell>{row.data[1]}</TableCell>
-                  <TableCell>{row.data[2]}</TableCell>
-                  <TableCell>{row.data[3]}</TableCell>
-                  <TableCell>{row.data[4]}</TableCell>
+                  <TableCell>{row.data[0] && row.data[0].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[1] && row.data[1].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[2] && row.data[2].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[3] && row.data[3].toLocaleString()}</TableCell>
+                  <TableCell>{row.data[4] && row.data[4].toLocaleString()}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

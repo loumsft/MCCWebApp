@@ -5,11 +5,12 @@ import OutputTableTabs from "./OutputTableTabs";
 import Session from "./Session";
 import Graph from "./Graph";
 import Paper from "@mui/material/Paper";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Output(props) {
-  const outputDataParsed = [
-    [//integratedRowsTotal
+  const outputData = [
+    [
+      //integratedRowsTotal
       {
         name: "Total number of sessions",
         data: props.outputData.totalNumSessionsIC,
@@ -47,8 +48,9 @@ export default function Output(props) {
         data: props.outputData.numMCMvCPUTotalIC,
       },
     ],
-    [//integratedRowsPerSite
-      
+    [
+      //integratedRowsPerSite
+
       {
         name: "Sessions per site",
         data: props.outputData.sessionsPerSiteIC,
@@ -82,8 +84,9 @@ export default function Output(props) {
         data: props.outputData.numvCPUMCMIC,
       },
     ],
-    [//cupsRowsCPTotal
-      
+    [
+      //cupsRowsCPTotal
+
       {
         name: "Total number of sessions (CUPS Case CP Site)",
         data: props.outputData.totalNumSessionsCCCP,
@@ -117,8 +120,9 @@ export default function Output(props) {
         data: props.outputData.numMCMvCPUTotalCCCP,
       },
     ],
-    [//cupsRowsCPPerSite
-      
+    [
+      //cupsRowsCPPerSite
+
       {
         name: "Number of CPM per site (CUPS Case CP Site)",
         data: props.outputData.numCPMCCCP,
@@ -144,8 +148,9 @@ export default function Output(props) {
         data: props.outputData.numMCMvCPUCCCP,
       },
     ],
-    [//cupsRowsUPTotal
-      
+    [
+      //cupsRowsUPTotal
+
       {
         name: "Total number of sessions (CUPS Case UP Site)",
         data: props.outputData.totalNumSessionsCCUP,
@@ -179,7 +184,8 @@ export default function Output(props) {
         data: props.outputData.numMSMvCPUTotalCCUP,
       },
     ],
-    [//cupsRowsUPPerSite
+    [
+      //cupsRowsUPPerSite
       {
         name: "Number of CPM per site (CUPS Case UP Site)",
         data: props.outputData.numCPMCCUP,
@@ -208,107 +214,87 @@ export default function Output(props) {
     ],
   ];
 
-  const [loadingOutputDataParsed, setLoadingOutputDataParsed] = useState(true);
 
   const [tableTab, setTableTab] = useState(0); //tab index of the output table tab
-
-  const formatOutputData = () => {
-    //format the outputData above to include commas
-    outputDataParsed.forEach((table, i) => {
-      table.forEach((row, j) => {
-        outputDataParsed[i][j].data.forEach((val, k) => {
-          console.log(outputDataParsed[i][j].data[k] , outputDataParsed[i][j].data)
-          outputDataParsed[i][j].data[k] = val && val.toLocaleString()
-        });
-      });
-    });
-  };
-
-  React.useEffect(async () => {
-    await formatOutputData()
-    setLoadingOutputDataParsed(false)
-  }, [])
   
+  React.useEffect(() => {
+    console.log(outputData)
+  }, [outputData])
+  
+  return ( 
+    <>
+      <OutputTableTabs
+        integratedRowsTotal={outputData[0]}
+        integratedRowsPerSite={outputData[1]}
+        cupsRowsCPTotal={outputData[2]}
+        cupsRowsCPPerSite={outputData[3]}
+        cupsRowsUPPerSite={outputData[4]}
+        cupsRowsUPTotal={outputData[5]}
+        tableTab={tableTab}
+        setTableTab={setTableTab}
+      />
 
-  return (
-    loadingOutputDataParsed ?
-      (<CircularProgress />):(
-      <>
-        <OutputTableTabs
-          integratedRowsTotal={outputDataParsed[0]}
-          integratedRowsPerSite={outputDataParsed[1]}
-          cupsRowsCPTotal={outputDataParsed[2]}
-          cupsRowsCPPerSite={outputDataParsed[3]}
-          cupsRowsUPPerSite={outputDataParsed[4]}
-          cupsRowsUPTotal={outputDataParsed[5]}
-          tableTab={tableTab}
-          setTableTab={setTableTab}
+      <Paper
+        sx={{
+          height: 400,
+          width: "91.4%",
+          margin: "auto",
+          paddingBottom: "4%",
+        }}
+      >
+        <h2 style={{ paddingTop: "2%", marginBottom: 0 }}>
+          Total Number of Sessions & Total Throughput (Gbps)
+        </h2>
+        {/* {GraphHandler()} */}
+        <Graph
+          totalNumSessions={outputData[0][0]}
+          totalTraffic={outputData[0][1]}
         />
+      </Paper>
+      <br />
 
-        <Paper
-          sx={{
-            height: 400,
-            width: "91.4%",
-            margin: "auto",
-            paddingBottom: "4%",
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <Button
+          onClick={() => {
+            axios("/api/download/" + props.currentFileName, {
+              method: "GET",
+              responseType: "blob", // important
+              headers: {
+                Authorization: "Bearer " + props.token,
+              },
+            }).then((response) => {
+              //Creates an <a> tag hyperlink that links the excel sheet Blob object to a url for downloading.
+              const url = window.URL.createObjectURL(new Blob([response.data]));
+              const link = document.createElement("a");
+              link.href = url;
+              const date = new Date();
+              const time =
+                "" +
+                date.getFullYear() +
+                "-" +
+                (date.getMonth() + 1) +
+                "-" +
+                date.getDate() +
+                "-" +
+                date.getTime();
+              link.setAttribute(
+                "download",
+                `${props.username} MCC Sizing model ${time}.xlsx`
+              ); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
+              document.body.appendChild(link);
+              link.click(); //programmatically click the link so the user doesn't have to
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url); //important for optimization and preventing memory leak even though link element has already been removed.
+              //https://stackoverflow.com/questions/41938718/how-to-download-files-using-axios?noredirect=1&lq=1
+            });
           }}
+          color='primary'
+          variant='contained'
         >
-          <h2 style={{ paddingTop: "2%", marginBottom: 0 }}>
-            Total Number of Sessions & Total Throughput (Gbps)
-          </h2>
-          {/* {GraphHandler()} */}
-          <Graph
-            totalNumSessions={outputDataParsed[0][0]}
-            totalTraffic={outputDataParsed[0][1]}
-            totalvCPUCPM={outputDataParsed[0][6]}
-            totalvCPUISM={outputDataParsed[0][7]}
-            totalvCPUMCM={outputDataParsed[0][8]}
-          />
-        </Paper>
-        <br />
-
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-          <Button
-            onClick={() => {
-              axios("/api/download/" + props.currentFileName, {
-                method: "GET",
-                responseType: "blob", // important
-                headers: {
-                  Authorization: "Bearer " + props.token,
-                },
-              }).then((response) => {
-                //Creates an <a> tag hyperlink that links the excel sheet Blob object to a url for downloading.
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement("a");
-                link.href = url;
-                const date = new Date();
-                const time =
-                  "" +
-                  date.getFullYear() +
-                  "-" +
-                  (date.getMonth() + 1) +
-                  "-" +
-                  date.getDate() +
-                  "-" +
-                  date.getTime();
-                link.setAttribute(
-                  "download",
-                  `${props.username} MCC Sizing model ${time}.xlsx`
-                ); //set the attribute of the <a> link tag to be downloadable when clicked and name the sheet based on the date and time right now.
-                document.body.appendChild(link);
-                link.click(); //programmatically click the link so the user doesn't have to
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url); //important for optimization and preventing memory leak even though link element has already been removed.
-                //https://stackoverflow.com/questions/41938718/how-to-download-files-using-axios?noredirect=1&lq=1
-              });
-            }}
-            color='primary'
-            variant='contained'
-          >
-            Download
-          </Button>
-          <Session {...props} />
-        </div>
-      </>)
-  );
+          Download
+        </Button>
+        <Session {...props} />
+      </div>
+    </>
+  )
 }
