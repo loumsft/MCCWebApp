@@ -7,6 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import InputTable from "./InputComponent/InputTable";
 import Output from './OutputComponent/Output';
 import DrawerProgressComponent from './NavBarComponent/DrawerProgressComponent';
+import AdvancedAnalysisComponent from './AdvancedAnalysisComponent';
 
 export default function MCC(props) {
 
@@ -44,8 +45,6 @@ export default function MCC(props) {
   const didMount = useRef(false);
 
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     handleNext()
@@ -81,19 +80,13 @@ export default function MCC(props) {
         setoutputData(response.data);
         setisOutputLoading(false);
       });
+      
     }
 
     
   }, [isOutputLoading]);
 
-  useEffect(() => {//testing inputtable
-    // console.log(inputTable)
-  }, [inputTable])
   
-  useEffect(() => {//testing filename
-    // console.log(currentFileName, editingFileName)
-
-  }, [currentFileName])
 
   const handleInputUpdates = (e, row) => {
     const {name, value} = e.target
@@ -151,12 +144,15 @@ export default function MCC(props) {
               <CircularProgress />
             </>
           ) : (
-            <InputTable 
-              handleSubmit={handleSubmit}
-              currentFileName={currentFileName}
-              inputTable={inputTable}
-              handleInputUpdates={handleInputUpdates}
-            />
+            <>
+              <InputTable 
+                handleSubmit={handleSubmit}
+                currentFileName={currentFileName}
+                inputTable={inputTable}
+                handleInputUpdates={handleInputUpdates}
+              />
+              <AdvancedAnalysisComponent token={props.token} currentFileName={currentFileName}/>
+            </>
           )
         )
       case 2:
@@ -220,6 +216,7 @@ export default function MCC(props) {
         setActiveStep={setActiveStep}
         activeStep={activeStep} 
       />
+
 
       {renderComponent(activeStep)}
       

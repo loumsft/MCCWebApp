@@ -698,6 +698,46 @@ def importSizingModel():#create new session from imported input table, config ta
         "configTable": configTable
     }
 
+@app.route("/api/analysis/<filename>", methods=["GET"], strict_slashes=False)
+@jwt_required()
+def getAdvancedAnalysis(filename):
+    pythoncom.CoInitialize()
+    with xw.App(visible=False) as app:
+        book = app.books.open(filename)
+        sheet = book.sheets['Advanced Analysis']
+        
+        response = {
+            "totalNumSessions": sheet.range("C3:G3").value,
+            "totalTraffic": sheet.range("C4:G4").value,
+            "perSessionAvgThroughput": sheet.range("C5:G5").value,
+            
+            "ISMPrimary": sheet.range("C9:G9").value,
+            "ISMBackup": sheet.range("C10:G10").value,
+            "ISMTotal": sheet.range("C11:G11").value,
+            "CPMPrimary": sheet.range("C12:G12").value,
+            "CPMBackup": sheet.range("C13:G13").value,
+            "CPMTotal": sheet.range("C14:G14").value,
+            "MCMTotal": sheet.range("C15:G15").value,
+            "ISMThroughputUsage": sheet.range("C17:G17").value,
+            "ISMSessionUsage": sheet.range("C18:G18").value,
+            "ISMLimitingFactor": sheet.range("C19:G19").value,
+            
+            "IOnums": sheet.range("C24:D24").value,
+            "SHDnums": sheet.range("C25:D25").value,
+            "Proxynums": sheet.range("C26:D26").value,
+            "PerISMThroughputCapacity": sheet.range("D27").value,
+            
+            "proxyCapacity": sheet.range("D30").value,
+            "requiredProxyCapacity": sheet.range("D31").value,
+            "metProxyRequirement": sheet.range("D32").value,
+            "PerISMSessionCapacity": sheet.range("D34").value
+        }
+        
+        book.save()
+        book.close()
+    pythoncom.CoUninitialize()
+    return response
+    
 
 if __name__ == "__main__":
     app.run(debug=True, use_debugger=False)

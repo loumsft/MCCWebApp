@@ -9,8 +9,9 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import {inputRows} from './inputRows';
+import { inputRows } from "./inputRows";
 import { Box } from "@mui/system";
+import axios from "axios";
 
 const ValidationTextField = styled(TextField)({
   "& input:valid + fieldset": {
@@ -33,7 +34,7 @@ function InputTable(props) {
     <Box
       component='form'
       onSubmit={props.handleSubmit}
-      sx={{paddingBottom:"1em"}}
+      sx={{ paddingBottom: "1em" }}
     >
       <TableContainer
         component={Paper}
@@ -59,25 +60,30 @@ function InputTable(props) {
                 <TableCell component='th' scope='row'>
                   {row.title}
                 </TableCell>
-                {['year1', 'year2', 'year3', 'year4', 'year5'].map((year, index) => (
-                    <TableCell align='right' key={index}> 
+                {["year1", "year2", "year3", "year4", "year5"].map(
+                  (year, index) => (
+                    <TableCell align='right' key={index}>
                       <ValidationTextField
-                        required={index===0}//only first year is required
-                        type="number"
+                        required={index === 0} //only first year is required
+                        type='number'
                         name={row.id}
-                        
-                        inputProps={{//lowercase inputProps targets the attributes of the input, not the props passed to the MUI component
-                          'data-key': index,
-                          min: '0'
+                        inputProps={{
+                          //lowercase inputProps targets the attributes of the input, not the props passed to the MUI component
+                          "data-key": index,
+                          min: "0",
                         }}
-                        label={index === 0 ? 'Required': null}//only the first year needs required label.
+                        label={index === 0 ? "Required" : null} //only the first year needs required label.
                         onChange={props.handleInputUpdates}
                         variant='outlined'
-                        autoFocus={row.title === "Total number of sessions" && index === 0}
+                        autoFocus={
+                          row.title === "Total number of sessions" &&
+                          index === 0
+                        }
                         value={props.inputTable[row.id][index] || ""}
                       />
                     </TableCell>
-                ))}
+                  )
+                )}
               </TableRow>
             ))}
           </TableBody>
